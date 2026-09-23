@@ -99,7 +99,9 @@
   .gow .bar h3{margin:0; font-size:18px;}
   .gow .body{padding:16px 18px;}
   .gow .matchline{font-family:"JetBrains Mono",monospace; font-weight:700; font-size:15px; margin-bottom:8px;}
-  .gow .split{display:flex; height:8px; border-radius:999px; overflow:hidden; background:var(--surface-2); margin-bottom:12px;}
+  .gow .split{display:flex; height:22px; border-radius:999px; overflow:hidden; background:var(--surface-2); margin-bottom:12px;
+    font-family:"JetBrains Mono",monospace; font-weight:700; font-size:11px; line-height:22px;}
+  .gow .split div{overflow:hidden; text-align:center; white-space:nowrap; color:#fff;}
   .gow .split div:first-child{background:var(--accent);}
   .gow .split div:last-child{background:var(--ink-faint);}
   .gow p{margin:0; color:var(--ink-soft);}
@@ -662,8 +664,12 @@
       document.getElementById("gotw-matchline").textContent = gow.matchline || "";
       document.getElementById("gotw-preview").textContent = gow.preview || "";
       if(gow.splitA!=null && gow.splitB!=null){
-        document.getElementById("gotw-split-a").style.width = gow.splitA+"%";
-        document.getElementById("gotw-split-b").style.width = gow.splitB+"%";
+        var splitAEl = document.getElementById("gotw-split-a");
+        var splitBEl = document.getElementById("gotw-split-b");
+        splitAEl.style.width = gow.splitA+"%";
+        splitBEl.style.width = gow.splitB+"%";
+        splitAEl.textContent = gow.splitA+"%";
+        splitBEl.textContent = gow.splitB+"%";
         splitEl.style.display = "flex";
       } else {
         splitEl.style.display = "none";
