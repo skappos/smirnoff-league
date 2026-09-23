@@ -1,5 +1,1074 @@
-<!doctype html><html><head><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'><title>Smirnoff League</title><link rel='stylesheet' href='styles.css'></head><body>
-<header><div class='brand'><div class='ice'>🧊</div><div><h1>SMIRNOFF LEAGUE</h1><p>FANTASY FOOTBALL · ICES · PUBLIC HUMILIATION</p></div></div><nav><button data-view='home' class='active'>League HQ</button><button data-view='recaps'>Weekly Recaps</button><button data-view='ice'>Ice Tracker</button><button data-view='vault'>Ice Vault</button><button data-view='rankings'>Rankings</button><button data-view='admin'>Commissioner</button></nav></header>
-<main id='app'></main>
-<footer>Sleeper League 1394061072742227968 · Ice deadline: Sunday 1:00 PM ET</footer>
-<script src='app.js'></script></body></html>
+<title>Smirnoff League</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Work+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap">
+<style>
+  :root{
+    --ink:#0E1622; --ink-soft:#4A5A6B; --ink-faint:#7C8C9C;
+    --paper:#F2F6F8; --surface:#FFFFFF; --surface-2:#E9F0F3; --line:#CBDCE6;
+    --accent:#1C7FB8; --accent-deep:#0E5A87; --accent-soft:#DCEEF7;
+    --owed:#C7401F; --owed-soft:#FBE3DD; --clear:#218753; --clear-soft:#DCF3E4;
+    --warn:#B57414; --warn-soft:#FBEAD1;
+    --shadow: 0 1px 2px rgba(14,22,34,.06), 0 8px 24px -12px rgba(14,22,34,.18);
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --ink:#EAF1F6; --ink-soft:#9FB4C4; --ink-faint:#6E8194;
+      --paper:#0A121B; --surface:#111C29; --surface-2:#16233263; --line:#223345;
+      --accent:#5EB6E8; --accent-deep:#8ED2F5; --accent-soft:#12293A;
+      --owed:#F3785C; --owed-soft:#3A1D18; --clear:#57CB8B; --clear-soft:#0F2A1C;
+      --warn:#F0B24E; --warn-soft:#332409;
+      --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 28px -12px rgba(0,0,0,.55);
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"]{
+    --ink:#EAF1F6; --ink-soft:#9FB4C4; --ink-faint:#6E8194;
+    --paper:#0A121B; --surface:#111C29; --surface-2:#16233263; --line:#223345;
+    --accent:#5EB6E8; --accent-deep:#8ED2F5; --accent-soft:#12293A;
+    --owed:#F3785C; --owed-soft:#3A1D18; --clear:#57CB8B; --clear-soft:#0F2A1C;
+    --warn:#F0B24E; --warn-soft:#332409;
+    --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 28px -12px rgba(0,0,0,.55);
+    color-scheme: dark;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0; background:var(--paper); color:var(--ink);
+    font-family:"Work Sans", system-ui, -apple-system, sans-serif;
+    font-size:15px; line-height:1.55; -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:1080px; margin:0 auto; padding-inline:20px;}
+  h1,h2,h3{font-family:"Anton", "Arial Narrow", sans-serif; font-weight:400; letter-spacing:.01em; text-wrap:balance;}
+  .mono{font-family:"JetBrains Mono", ui-monospace, monospace; font-variant-numeric:tabular-nums;}
+  a{color:var(--accent);}
+  button{font-family:inherit;}
+
+  /* ---------- header ---------- */
+  header.top{
+    position:sticky; top:env(safe-area-inset-top,0px); z-index:20;
+    background:var(--surface); border-bottom:1px solid var(--line);
+  }
+  .masthead{display:flex; align-items:center; justify-content:space-between; gap:8px 12px; flex-wrap:wrap; padding-block:14px 10px;}
+  .brand{display:flex; align-items:baseline; gap:10px; flex-wrap:wrap;}
+  .brand .mark{font-family:"Anton",sans-serif; font-size:clamp(22px,4.5vw,32px); letter-spacing:.02em; line-height:1;}
+  .brand .mark span{color:var(--accent);}
+  .brand .tag{font-size:11px; letter-spacing:.14em; text-transform:uppercase; color:var(--ink-faint); border:1px solid var(--line); border-radius:999px; padding:3px 9px;}
+  .weekpill{font-family:"JetBrains Mono",monospace; font-size:12px; font-weight:700; letter-spacing:.03em; background:var(--accent-soft); color:var(--accent-deep); border-radius:999px; padding:6px 12px; white-space:nowrap;}
+  @media (max-width:400px){.weekpill{font-size:10.5px; padding:5px 10px;}}
+  nav.tabs{display:flex; gap:4px; overflow-x:auto; padding-bottom:10px; scrollbar-width:none;}
+  nav.tabs::-webkit-scrollbar{display:none;}
+  nav.tabs a{
+    flex:0 0 auto; text-decoration:none; color:var(--ink-soft); font-size:13px; font-weight:600;
+    padding:11px 14px; border-radius:10px 10px 0 0; border-bottom:3px solid transparent; white-space:nowrap;
+  }
+  nav.tabs a.active{color:var(--accent-deep); border-bottom-color:var(--accent); background:var(--accent-soft);}
+
+  main{padding-block:26px 60px;}
+  section.view{display:none;}
+  section.view.active{display:block;}
+  .eyebrow{font-size:11px; font-weight:700; letter-spacing:.16em; text-transform:uppercase; color:var(--accent-deep);}
+  .view h2.title{font-size:clamp(28px,5vw,40px); margin:2px 0 4px;}
+  .view p.lede{color:var(--ink-soft); margin:0 0 22px; max-width:62ch;}
+
+  /* ---------- stat tiles ---------- */
+  .stats{display:grid; grid-template-columns:repeat(4,1fr); gap:10px; margin-bottom:26px;}
+  @media (max-width:640px){.stats{grid-template-columns:repeat(2,1fr);}}
+  .stat{background:var(--surface); border:1px solid var(--line); border-radius:14px; padding:14px 16px;}
+  .stat .k{font-size:11px; letter-spacing:.08em; text-transform:uppercase; color:var(--ink-faint); margin-bottom:6px;}
+  .stat .v{font-family:"JetBrains Mono",monospace; font-weight:700; font-size:20px;}
+  .stat .sub{font-size:12px; color:var(--ink-soft); margin-top:2px;}
+  .stat.owe .v{color:var(--owed);}
+
+  /* ---------- week chips ---------- */
+  .weekchips{display:flex; gap:8px; margin-bottom:18px; flex-wrap:wrap;}
+  .weekchips button{
+    border:1px solid var(--line); background:var(--surface); color:var(--ink-soft);
+    border-radius:999px; padding:9px 16px; font-size:13px; font-weight:600; cursor:pointer;
+  }
+  .weekchips button.active{background:var(--ink); color:var(--paper); border-color:var(--ink);}
+  .weekchips button[disabled]{opacity:.45; cursor:default;}
+
+  /* ---------- game of the week ---------- */
+  .gow{
+    border:1px solid var(--line); border-radius:16px; overflow:hidden; background:var(--surface);
+    margin-bottom:26px; box-shadow:var(--shadow);
+  }
+  .gow .bar{background:var(--ink); color:var(--paper); padding:9px 18px; display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap;}
+  .gow .bar .eyebrow{color:var(--accent);}
+  .gow .bar h3{margin:0; font-size:18px;}
+  .gow .body{padding:16px 18px;}
+  .gow .matchline{font-family:"JetBrains Mono",monospace; font-weight:700; font-size:15px; margin-bottom:8px;}
+  .gow .split{display:flex; height:8px; border-radius:999px; overflow:hidden; background:var(--surface-2); margin-bottom:12px;}
+  .gow .split div:first-child{background:var(--accent);}
+  .gow .split div:last-child{background:var(--ink-faint);}
+  .gow p{margin:0; color:var(--ink-soft);}
+
+  /* ---------- matchup cards ---------- */
+  .matchups{display:grid; grid-template-columns:1fr 1fr; gap:16px;}
+  @media (max-width:760px){.matchups{grid-template-columns:1fr;}}
+  .mcard{background:var(--surface); border:1px solid var(--line); border-radius:16px; overflow:hidden; box-shadow:var(--shadow);}
+  .gow-ribbon{background:var(--ink); color:var(--accent); font-size:10.5px; font-weight:700; letter-spacing:.06em; text-transform:uppercase; padding:6px 16px;}
+  .mcard .score{padding:14px 16px; background:var(--surface-2);}
+  .mrow{display:flex; align-items:center; justify-content:space-between; gap:10px; padding:3px 0;}
+  .mrow .who{display:flex; align-items:center; gap:8px; min-width:0;}
+  .mrow .name{font-weight:700; font-size:14.5px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+  .mrow .mgr{font-size:11.5px; color:var(--ink-faint);}
+  .mrow .pts{font-family:"JetBrains Mono",monospace; font-weight:700; font-size:16px;}
+  .mrow.win .name{color:var(--accent-deep);}
+  .mrow.win .pts{color:var(--accent-deep);}
+  .mrow.lose{opacity:.62;}
+  .badge{font-size:9.5px; font-weight:700; letter-spacing:.06em; text-transform:uppercase; border-radius:999px; padding:2px 7px;}
+  .badge.win{background:var(--accent-soft); color:var(--accent-deep);}
+  .badge.role{background:var(--accent-soft); color:var(--accent-deep); margin-left:6px;}
+  .mcard .recap{padding:14px 16px 16px;}
+  .mcard .recap .blurb{margin-bottom:12px;}
+  .mcard .recap .blurb:last-child{margin-bottom:0;}
+  .mcard .recap .who-said{font-size:11px; font-weight:700; letter-spacing:.06em; text-transform:uppercase; color:var(--ink-faint); margin-bottom:4px;}
+  .mcard .recap p{margin:0; color:var(--ink-soft); font-size:13.6px;}
+
+  /* ---------- standings ---------- */
+  .standings-wrap{display:grid; grid-template-columns:1.15fr 1fr; gap:22px; align-items:start;}
+  @media (max-width:820px){.standings-wrap{grid-template-columns:1fr;}}
+  table.standings{width:100%; border-collapse:collapse; background:var(--surface); border:1px solid var(--line); border-radius:14px; overflow:hidden;}
+  table.standings th{text-align:left; font-size:10.5px; letter-spacing:.08em; text-transform:uppercase; color:var(--ink-faint); padding:9px 12px; border-bottom:1px solid var(--line);}
+  table.standings td{padding:9px 12px; border-bottom:1px solid var(--line); font-size:13.5px;}
+  table.standings tr:last-child td{border-bottom:none;}
+  table.standings td.rk{font-family:"JetBrains Mono",monospace; color:var(--ink-faint);}
+  table.standings td.team{font-weight:700;}
+  table.standings td.mgr{color:var(--ink-faint); font-size:12px;}
+  table.standings td.rec, table.standings td.pts{font-family:"JetBrains Mono",monospace; text-align:right;}
+  tr.div-row td{background:var(--ink); color:var(--paper); font-size:10.5px; letter-spacing:.12em; text-transform:uppercase; font-weight:700; padding:6px 12px;}
+  tr.toilet td.team{color:var(--ink-soft);}
+
+  .barchart{background:var(--surface); border:1px solid var(--line); border-radius:14px; padding:16px 18px;}
+  .barchart h4{margin:0 0 14px; font-size:11px; letter-spacing:.08em; text-transform:uppercase; color:var(--ink-faint); font-family:"Work Sans";}
+  .bar-row{display:grid; grid-template-columns:96px 1fr 52px; align-items:center; gap:8px; margin-bottom:7px;}
+  .bar-row .lbl{font-size:11.5px; font-weight:600; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+  .bar-row .track{background:var(--surface-2); border-radius:999px; height:10px; overflow:hidden;}
+  .bar-row .fill{height:100%; border-radius:999px;}
+  .bar-row .fill.playoff{background:var(--accent);}
+  .bar-row .fill.toilet{background:var(--ink-faint);}
+  .bar-row .val{font-family:"JetBrains Mono",monospace; font-size:11.5px; text-align:right;}
+  .legend{display:flex; gap:16px; margin-top:12px; font-size:11px; color:var(--ink-soft);}
+  .legend span{display:inline-flex; align-items:center; gap:6px;}
+  .legend i{width:9px; height:9px; border-radius:3px; display:inline-block;}
+
+  /* ---------- rules + ice ---------- */
+  .rules{display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-bottom:26px;}
+  @media (max-width:680px){.rules{grid-template-columns:1fr;}}
+  .rule{background:var(--owed-soft); border:1px solid var(--owed); border-radius:14px; padding:16px 18px;}
+  .rule .num{font-family:"Anton"; font-size:26px; color:var(--owed); line-height:1;}
+  .rule h4{margin:8px 0 4px; font-size:15px;}
+  .rule p{margin:0; font-size:13px; color:var(--ink-soft);}
+
+  table.tally{width:100%; border-collapse:collapse; background:var(--surface); border:1px solid var(--line); border-radius:14px; overflow:hidden; margin-bottom:28px;}
+  table.tally th{text-align:left; font-size:10.5px; letter-spacing:.08em; text-transform:uppercase; color:var(--ink-faint); padding:10px 12px; border-bottom:1px solid var(--line);}
+  table.tally td{padding:10px 12px; border-bottom:1px solid var(--line); font-size:13.5px;}
+  table.tally tr:last-child td{border-bottom:none;}
+  table.tally td.tm{font-weight:700;}
+  table.tally td.tm .team{color:var(--ink-faint); font-size:12px; font-weight:500; margin-top:2px;}
+  .pill{font-family:"JetBrains Mono",monospace; font-size:11.5px; font-weight:700; border-radius:999px; padding:3px 10px; display:inline-block;}
+  .pill.owed{background:var(--owed-soft); color:var(--owed);}
+  .pill.clear{background:var(--clear-soft); color:var(--clear);}
+  .reasons{font-size:11.5px; color:var(--ink-faint);}
+
+  /* ---------- forms ---------- */
+  .panel{background:var(--surface); border:1px solid var(--line); border-radius:16px; padding:20px 22px; margin-bottom:22px;}
+  .panel h3{margin:0 0 4px; font-size:19px;}
+  .panel p.hint{margin:0 0 16px; color:var(--ink-soft); font-size:13px;}
+  .frow{display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:12px;}
+  @media (max-width:600px){.frow{grid-template-columns:1fr;}}
+  label{display:block; font-size:11.5px; font-weight:700; letter-spacing:.04em; text-transform:uppercase; color:var(--ink-faint); margin-bottom:5px;}
+  select, input[type=text], input[type=url], input[type=file], textarea{
+    width:100%; border:1px solid var(--line); background:var(--paper); color:var(--ink);
+    border-radius:9px; padding:11px; font-size:16px; font-family:inherit;
+  }
+  textarea{resize:vertical; min-height:60px;}
+  .actions{display:flex; align-items:center; gap:10px; margin-top:6px; flex-wrap:wrap;}
+  .btn{
+    border:none; border-radius:9px; padding:12px 20px; font-size:14px; font-weight:700; cursor:pointer;
+    background:var(--ink); color:var(--paper); min-height:44px;
+  }
+  .btn.secondary{background:transparent; color:var(--accent-deep); border:1px solid var(--line);}
+  .out{
+    margin-top:14px; border:1px dashed var(--line); border-radius:11px; padding:12px 14px; display:none;
+    background:var(--accent-soft);
+  }
+  .out.show{display:block;}
+  .out .ok{font-size:12.5px; font-weight:700; color:var(--accent-deep); margin-bottom:6px;}
+  .out textarea{background:var(--surface); font-family:"JetBrains Mono",monospace; font-size:12px;}
+
+  /* ---------- leaderboard ---------- */
+  table.board{width:100%; border-collapse:collapse; background:var(--surface); border:1px solid var(--line); border-radius:14px; overflow:hidden; margin-bottom:22px;}
+  table.board th{text-align:left; font-size:10.5px; letter-spacing:.08em; text-transform:uppercase; color:var(--ink-faint); padding:10px 12px; border-bottom:1px solid var(--line);}
+  table.board td{padding:11px 12px; border-bottom:1px solid var(--line); font-size:13.5px;}
+  table.board tr:last-child td{border-bottom:none;}
+  table.board td.rk{font-family:"Anton"; font-size:16px; color:var(--ink-faint); width:34px;}
+  table.board td.rk.first{color:var(--accent);}
+  table.board td.tm{font-family:"JetBrains Mono",monospace; font-weight:700;}
+  .empty{padding:22px; text-align:center; color:var(--ink-faint); font-size:13.5px; border:1px dashed var(--line); border-radius:14px; margin-bottom:22px;}
+
+  /* ---------- wire ---------- */
+  .wire-team{margin-bottom:26px;}
+  .wire-team h3{margin:0 0 12px; font-size:20px; display:flex; align-items:center; gap:8px;}
+  .qa{background:var(--surface); border:1px solid var(--line); border-radius:14px; padding:14px 16px; margin-bottom:10px;}
+  .qa .q{font-size:12.5px; font-weight:700; color:var(--ink-faint); margin-bottom:6px;}
+  .qa .a{margin:0; font-size:14px; font-style:italic;}
+
+  footer{border-top:1px solid var(--line); padding:22px 0 40px; text-align:center; color:var(--ink-faint); font-size:12px;}
+  .tablewrap{overflow-x:auto; border-radius:14px;}
+  .tablewrap table{border-radius:0; min-width:420px;}
+  .tablewrap table.tally{min-width:0;}
+
+  /* ---------- video gallery ---------- */
+  .video-grid{display:grid; grid-template-columns:repeat(auto-fill, minmax(200px,1fr)); gap:14px; margin-bottom:26px;}
+  .video-card{background:var(--surface); border:1px solid var(--line); border-radius:14px; overflow:hidden; box-shadow:var(--shadow);}
+  .video-card video{width:100%; display:block; background:#000; aspect-ratio:9/16; object-fit:cover;}
+  .video-card .meta{padding:9px 11px;}
+  .video-card .meta .who{font-weight:700; font-size:13px;}
+  .video-card .meta .reason{font-size:11px; color:var(--ink-faint); margin-top:2px;}
+</style>
+
+<header class="top">
+  <div class="wrap">
+    <div class="masthead">
+      <div class="brand">
+        <div class="mark">SMIRNOFF <span>LEAGUE</span></div>
+        <div class="tag">14-team dynasty of shame</div>
+      </div>
+      <div class="weekpill" id="weekpill">WEEK 3 · SYNCED FROM SLEEPER</div>
+    </div>
+    <nav class="tabs" id="tabnav">
+      <a href="#wire" data-tab="wire">League Wire</a>
+      <a href="#recaps" data-tab="recaps">Recaps</a>
+      <a href="#standings" data-tab="standings">Standings</a>
+      <a href="#ice" data-tab="ice">Ice Tally</a>
+      <a href="#chug" data-tab="chug">Ice Rankings</a>
+      <a href="#submit" data-tab="submit">Chug Submissions</a>
+      <a href="#videos" data-tab="videos">Chug Archive</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- ================= LEAGUE WIRE ================= -->
+  <section class="view" id="view-wire">
+    <div class="eyebrow">Press Conferences</div>
+    <h2 class="title">League Wire</h2>
+    <p class="lede">Quotes from the newsletter's own press room. Read at your own risk.</p>
+
+    <div class="weekchips" id="wire-weekchips"></div>
+
+    <div id="wire-body"></div>
+  </section>
+
+  <!-- ================= RECAPS ================= -->
+  <section class="view" id="view-recaps">
+    <div class="eyebrow" id="recap-eyebrow">Week 1</div>
+    <h2 class="title" id="recap-title">Week 1 Recaps</h2>
+    <p class="lede" id="recap-lede">Seven games, four ices, and one guy who forgot to set his lineup. Here's what happened.</p>
+
+    <div class="stats" id="stats"></div>
+
+    <div class="weekchips" id="weekchips"></div>
+
+    <div class="gow" id="gotw">
+      <div class="bar"><div class="eyebrow" id="gotw-eyebrow">Game of the Week</div><h3 id="gotw-tag"></h3></div>
+      <div class="body">
+        <div class="matchline" id="gotw-matchline"></div>
+        <div class="split" id="gotw-split" style="display:none;"><div id="gotw-split-a"></div><div id="gotw-split-b"></div></div>
+        <p id="gotw-preview" style="margin:0;"></p>
+      </div>
+    </div>
+
+    <div class="matchups" id="matchups"></div>
+  </section>
+
+  <!-- ================= STANDINGS ================= -->
+  <section class="view" id="view-standings">
+    <div class="eyebrow">Power Rankings · Through Week 2</div>
+    <h2 class="title">Standings</h2>
+    <p class="lede">Top 8 are playoff-bound as of this week. Bottom 6 are fighting for their fantasy lives in the Toilet Bowl.</p>
+
+    <div class="standings-wrap">
+      <div class="tablewrap"><table class="standings" id="standings-table"></table></div>
+      <div class="barchart">
+        <h4>Total points scored</h4>
+        <div id="barchart-body"></div>
+        <div class="legend">
+          <span><i style="background:var(--accent)"></i>Playoff line</span>
+          <span><i style="background:var(--ink-faint)"></i>Toilet Bowl</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= ICE TALLY ================= -->
+  <section class="view" id="view-ice">
+    <div class="eyebrow">The Punishment</div>
+    <h2 class="title">Ice Tally</h2>
+    <p class="lede">Two ways to earn an ice. Videos are due by 1:00&nbsp;PM the Sunday after the newsletter drops.</p>
+
+    <div class="rules">
+      <div class="rule"><div class="num">01</div><h4>The Zero</h4><p>Start a player who scores 0.00 or less fantasy points? That's an automatic ice, no exceptions.</p></div>
+      <div class="rule"><div class="num">02</div><h4>The Basement</h4><p>Lowest total score in the league that week owes an ice, on top of anything else they've racked up.</p></div>
+    </div>
+
+    <div class="tablewrap"><table class="tally" id="tally-table"></table></div>
+  </section>
+
+  <!-- ================= CHUG CENTRAL ================= -->
+  <section class="view" id="view-chug">
+    <div class="eyebrow">Speed &amp; Suffering</div>
+    <h2 class="title">Ice Rankings</h2>
+    <p class="lede">Every ice chug time on record — ranked by personal best, tracked by average as the season piles up.</p>
+
+    <div class="tablewrap"><table class="board" id="board-table"></table></div>
+    <div class="empty" id="board-empty" style="display:none">No chug times logged yet this season — the first one sets the bar.</div>
+
+    <h3 style="margin:26px 0 12px; font-size:19px;">Ranked by week</h3>
+    <div class="weekchips" id="chug-weekchips"></div>
+    <div class="tablewrap"><table class="board" id="chug-week-table"></table></div>
+    <div class="empty" id="chug-week-empty" style="display:none">No chug times logged this week yet.</div>
+  </section>
+
+  <!-- ================= CHUG SUBMISSIONS ================= -->
+  <section class="view" id="view-submit">
+    <div class="eyebrow">Show It Off</div>
+    <h2 class="title">Chug Submissions</h2>
+    <p class="lede">Pay your dues to the Smirnoff gods. The commish will review your video and clock the official chug time.</p>
+
+    <div class="panel">
+      <h3>Upload your video</h3>
+      <div class="frow">
+        <div><label for="submit-name">Who's chugging</label>
+          <select id="submit-name"></select>
+        </div>
+        <div><label for="submit-which">Which ice (optional)</label>
+          <select id="submit-which"></select>
+        </div>
+      </div>
+      <div><label for="submit-file">Video file</label>
+        <input type="file" id="submit-file" accept="video/*"></div>
+      <p class="hint" style="margin:-6px 0 12px;">Keep it under 50MB (trim to just the chug if your phone video is long, upload will fail past that size).</p>
+      <div class="actions">
+        <button class="btn" id="submit-upload">Upload video</button>
+        <span id="submit-upload-status" style="font-size:12.5px; color:var(--ink-soft);"></span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= CHUG ARCHIVE ================= -->
+  <section class="view" id="view-videos">
+    <div class="eyebrow">Every Chug, On Tape</div>
+    <h2 class="title">Chug Archive</h2>
+    <p class="lede">Every fulfillment video the league's uploaded, all in one place.</p>
+
+    <div class="video-grid" id="videos-grid"></div>
+    <div class="empty" id="videos-empty" style="display:none">No videos uploaded yet — be the first.</div>
+  </section>
+
+</main>
+
+<footer>Smirnoff League</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+(function(){
+  "use strict";
+
+  // ---------------- backend (Supabase: shared storage + database for ice videos) ----------------
+  var SUPABASE_URL = "https://dasvlhjvqpoiiovxlmdb.supabase.co";
+  var SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRhc3ZsaGp2cXBvaWlvdnhsbWRiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTAxNzEzMTQsImV4cCI6MjEwNTc0NzMxNH0._Ru0Djn4gjwvwWed6-VQhlFnkvdyjVbEOp15O3-3e4Y";
+  var sb = null;
+  try{
+    if(window.supabase && window.supabase.createClient){
+      sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    }
+  }catch(e){ sb = null; }
+
+  // ---------------- data ----------------
+  // Records/points current through Week 2 (synced from Sleeper league 1394061072742227968)
+  var TEAMS = [
+    {id:"prospect-prodigies", name:"Prospect Prodigies", managers:["Xavi Fernandez","Sophia Jenkins"], w:1,l:1, bracket:"playoff", rank:5, pts:268.06},
+    {id:"tony-romos-dd", name:"Tony Romo's DD", managers:["Caden Skinner"], w:2,l:0, bracket:"playoff", rank:1, pts:354.22, commish:true},
+    {id:"harold", name:"Harold", managers:["Jackson Harrell"], w:1,l:1, bracket:"playoff", rank:6, pts:263.98},
+    {id:"tordongamsey", name:"TordonGamsey", managers:["Tori Giordano"], w:1,l:1, bracket:"playoff", rank:7, pts:256.96},
+    {id:"mclems-tight-ends", name:"MClem's Tight Ends", managers:["Maggie Clemens"], w:2,l:0, bracket:"playoff", rank:2, pts:271.68},
+    {id:"hobson336god", name:"Hob$son336god", managers:["Hobson Sherrill"], w:2,l:0, bracket:"playoff", rank:3, pts:262.98},
+    {id:"kappocalypse", name:"The Kappocalypse", managers:["Sophie Kappos"], w:2,l:0, bracket:"playoff", rank:4, pts:225.78},
+    {id:"jaxsoff-dart", name:"Jaxsoff Dart", managers:["John Moore"], w:0,l:2, bracket:"toilet", rank:13, pts:213.40},
+    {id:"natty-ice", name:"Natty Ice", managers:["Natalie Plude"], w:1,l:1, bracket:"toilet", rank:9, pts:231.90},
+    {id:"jonasty9", name:"Jonasty9", managers:["Alex Jonas"], w:0,l:2, bracket:"toilet", rank:12, pts:217.84},
+    {id:"dom336god", name:"Dom336god", managers:["Dom Giordano"], w:0,l:2, bracket:"toilet", rank:11, pts:246.86},
+    {id:"jlappp", name:"Jlappp", managers:["Jacob Lapham"], w:1,l:1, bracket:"playoff", rank:8, pts:244.68},
+    {id:"lewiscollier", name:"Lewiscollier", managers:["Lewis Collier"], w:1,l:1, bracket:"toilet", rank:10, pts:198.94},
+    {id:"dotes18", name:"Dotes18", managers:["Alex Doty"], w:0,l:2, bracket:"toilet", rank:14, pts:206.44}
+  ];
+  var CURRENT_WEEK = 2; // last fully-scored week
+  var UPCOMING_WEEK = 3;
+  var UPCOMING_MATCHUPS = [ // pairings only — Week 3 hasn't been played yet
+    ["jlappp","hobson336god"], ["jonasty9","dom336god"], ["tordongamsey","jaxsoff-dart"],
+    ["kappocalypse","natty-ice"], ["mclems-tight-ends","lewiscollier"], ["dotes18","prospect-prodigies"],
+    ["tony-romos-dd","harold"]
+  ];
+
+  // The marquee matchup Sophie picks each week, keyed by the week it's ANNOUNCED in
+  // (each pick previews the following week's actual game — same as the newsletter:
+  // the Week 1 issue picked "Lover's Quarrel" for the Week 2 game). Update this each
+  // week; it drives the Game of the Week card at the top of that week's Recaps tab,
+  // and the ribbon shown on the matching matchup card once that game's been played.
+  var GAME_OF_WEEK = {
+    1: {a:"tordongamsey", b:"hobson336god", tag:"Lover's Quarrel",
+        matchline:"TordonGamsey (1-0) vs. Hob$son336god (1-0)", splitA:49, splitB:51,
+        preview:"Nothing says romance like Tori and Hobson squaring off in Week 2, both undefeated and projected just over a point apart. Hobson's repping the 336 (Greensboro) and brought some serious risk tolerance to his lineup — starting Michael Mayer on a 3.59 projection against his own girlfriend is one hell of a bet. Tori's Lamar Jackson / Derrick Henry stack looks ready to make it a long Sunday on the couch. The house usually wins — we'll see if Hobson can pull it off."},
+    2: {a:"jonasty9", b:"dom336god", tag:"Basement Bowl",
+        matchline:"Jonasty9 (0-2) vs. Dom336god (0-2)",
+        preview:"Dogshit vs. dogshit. Both teams are winless through two weeks, so this one's less about who's good and more about who's willing to be worse. Loser keeps their seat at the kids' table."}
+  };
+
+  var PEOPLE = [
+    {name:"Alex Doty", team:"dotes18"},
+    {name:"Sophie Kappos", team:"kappocalypse"},
+    {name:"Hobson Sherrill", team:"hobson336god"},
+    {name:"Lewis Collier", team:"lewiscollier"},
+    {name:"Caden Skinner", team:"tony-romos-dd"},
+    {name:"Jackson Harrell", team:"harold"},
+    {name:"Tori Giordano", team:"tordongamsey"},
+    {name:"Maggie Clemens", team:"mclems-tight-ends"},
+    {name:"John Moore", team:"jaxsoff-dart"},
+    {name:"Natalie Plude", team:"natty-ice"},
+    {name:"Alex Jonas", team:"jonasty9"},
+    {name:"Dom Giordano", team:"dom336god"},
+    {name:"Jacob Lapham", team:"jlappp"},
+    {name:"Xavi Fernandez", team:"prospect-prodigies"},
+    {name:"Sophia Jenkins", team:"prospect-prodigies"}
+  ];
+
+  function teamOf(id){ for(var i=0;i<TEAMS.length;i++) if(TEAMS[i].id===id) return TEAMS[i]; return null; }
+  function teamName(id){ var t=teamOf(id); return t? t.name : id; }
+
+  var MATCHUPS = [
+    {week:1, a:"tony-romos-dd", b:"natty-ice", sa:171.54, sb:127.36,
+      ra:"Caden came into Week 1 not messing around, handing the offense to Bryce Young — who promptly put up the second-highest point total of his career. Walker and Swift are forming a two-headed monster at running back, and Parker Washington looks ready to justify the preseason hype. Amon-Ra held it down with his usual high floor. The one worry: Jaylen Waddle was a bust, and the rookie tight end and WR3 looked like ghosts. Question marks aside, this team is stacked at the top.",
+      rb:"Natalie came in with a 131-point projection and mostly delivered. Jayden Daniels dropped 17.66 while somehow captaining the worst offense in the league for a half. Ashton Jeanty's late-second-round price tag might turn out to be a steal, and Breece Hall looks like the only Jet with a pulse. Ja'Marr Chase managing just 3.2 points in a 30-point Bengals game is alarming — knee injury lingering? Terry McLaurin barely got looked at, and Kenny Gainwell couldn't gain much of anything. Bright spots overall, but a rough opener."},
+    {week:1, a:"prospect-prodigies", b:"jonasty9", sa:182.70, sb:123.56,
+      ra:"Xavi and Sophia built the real deal. That B- draft grade is looking silly after this tear. Justin Jefferson reminded everyone that when he's the first read, he's the best receiver alive. Mike Evans looks like Brock Purdy's safety valve, and the Jaguars offense might be legit — or the Browns are just that bad. Only real nitpick: Marvin Harrison Jr. is somehow only Arizona's WR3.",
+      rb:"Alex is addicted to drafting Bijan Robinson and Drake London, and it showed — Bijan looked like himself, but London's getting thrown to by a glorified accountant. Evan McPherson dropping 19 points at kicker is an elite hit in the crapshoot we all play. Outside of Bijan, the receiving corps didn't have a single player crack double digits, and the Chargers offense got embarrassed by Arizona. No alarms yet, but not the showcase this roster promised."},
+    {week:1, a:"tordongamsey", b:"jlappp", sa:151.96, sb:98.28,
+      ra:"When the Ravens roll, so does Tori — Lamar Jackson and Derrick Henry combined for 60-plus points. Ladd McConkey looks like WR1 in the post-Keenan-Allen Chargers offense, and Nico Collins keeps proving he's reliable even with a shaky QB. Jayden Reed looks like the odd man out in Green Bay's receiver room, and Quentin Johnston stunk — but better days might be ahead as Justin Herbert's deep threat. A 150-plus week has this team feeling confident early.",
+      rb:"Rough one for Jacob. Malik Nabers had a modest week, but as he gets further from the injury he could climb back to the top of the WR pecking order. San Francisco looks intent on managing McCaffrey's workload — his backup out-carried him, though McCaffrey still gets all the premium touches worth monitoring. The Rams looked unprepared and gave Davante Adams a stinker, Marshawn Lloyd didn't do much with his opportunities, and the Titans' whole offense looks bleak. The one silver lining: nobody on this roster drew an ice."},
+    {week:1, a:"mclems-tight-ends", b:"dotes18", sa:134.46, sb:91.46,
+      ra:"Maggie's built her own two-headed monster in Jahmyr Gibbs and Josh Allen — the pair combined for just shy of 70 points. Chicago wants to score early and often, and even as a backup, Kyle Monangai looks like he has real starter value. After those three, things got pretty mediocre, but better days are ahead.",
+      rb:"Alex has to be furious with how this team played. JSN still rocks — that's the end of the good news. The rest of the receiving corps stunk across the board, Jacksonville keeps feeding their backup at the goal line, and Cincinnati looked to Chase Brown in the red zone instead. A brutal week, and the league's lowest score to boot — that's an ice."},
+    {week:1, a:"hobson336god", b:"lewiscollier", sa:134.02, sb:94.82,
+      ra:"Hobson had a surprise week. Jalen Coker might be Carolina's new WR1, and Jalen Hurts stays a locked-in top-five fantasy QB. The Colts stink, but Jonathan Taylor doesn't care — he never does. Zay Flowers looks every bit a top-10 receiver this year. The flip side of Hurts being personally productive: he's terrible for making his own receivers fantasy-relevant. DeVonta Smith has a fullback throwing him the ball, and Colston Loveland dropped a donut in a game where Chicago put up 59. High highs and low lows in equal measure.",
+      rb:"Rough Week 1 for Lewis, just a shade better than the league's worst. On the bright side, Trey McBride is still him. Puka Nacua had a slow start but should bounce back, and Drake Maye had a rough outing and lost his WR1 in the process. Brian Thomas is stuck fully behind Jacksonville's real WR1, and starting two backups at once was fantasy malpractice. At least it wasn't the league's lowest score."},
+    {week:1, a:"harold", b:"jaxsoff-dart", sa:156.66, sb:131.30,
+      ra:"Jackson opened the year with a bang, posting the third-most points in the league. Caleb Williams looks like he's taken another step into year three. Chris Olave carved up Detroit's secondary and led the NFL in receiving yards through Week 1. Javonte Williams is going to get every opportunity out of the Dallas backfield, and James Cook had a mediocre week but is primed to feast in Detroit next. The one blemish: the backup tight end looks obsolete whenever CeeDee Lamb and George Pickens are both playing. This could be a fruitful year.",
+      rb:"John's got a well-rounded attack led by Jaxson Dart, who looked great in his debut — are the Giants for real this year? Cam Skattebo looked fully past his injury, with 18 carries leading the backfield easily. DJ Moore turned back into his old Carolina self, and the backfield timeshare got settled with the lead back reestablishing himself. The only real blemish: AJ Brown is out at least six weeks, a gutting loss early in the season for a second-round pick."},
+    {week:1, a:"kappocalypse", b:"dom336god", sa:120.20, sb:114.94,
+      ra:"Dom blew it. All he needed was 12 points from Bo Nix, and Nix laid an absolute egg instead. The running back room started hot, with two lead backs dominating their backfields, and CeeDee Lamb bounced back nicely in a game where Dallas otherwise looked lost. A top-heavy roster on paper — Harold Fannin has a shaky quarterback throwing him the ball, and fantasy expectations need to be tempered there. Decent floor pieces at flex, but this team feels like a 6-6 outfit.",
+      rb:"Sophie starts the year with her first-ever Week 1 win in the league. It wasn't pretty, but the former commissioner pulled out the W. Christian Watson looks like an elite fantasy receiver if he can stay on the field, and Brock Purdy remains the safe, steady QB pick he's been for years. After that, the rest of the roster played it pretty “meh” — Kyle Pitts has a shaky quarterback throwing him the ball (at least Dallas Goedert can spell him), and the Titans passing game is shaping up as an 8-points-a-week floor play. High floor, potentially low ceiling."},
+    {week:2, a:"dom336god", b:"jlappp", sa:131.92, sb:146.40, ra:null, rb:null},
+    {week:2, a:"tordongamsey", b:"hobson336god", sa:105.00, sb:128.96, ra:null, rb:null},
+    {week:2, a:"kappocalypse", b:"jonasty9", sa:105.58, sb:94.28, ra:null, rb:null},
+    {week:2, a:"lewiscollier", b:"jaxsoff-dart", sa:104.12, sb:82.10, ra:null, rb:null},
+    {week:2, a:"natty-ice", b:"prospect-prodigies", sa:104.54, sb:85.36, ra:null, rb:null},
+    {week:2, a:"mclems-tight-ends", b:"harold", sa:137.22, sb:107.32, ra:null, rb:null},
+    {week:2, a:"tony-romos-dd", b:"dotes18", sa:182.68, sb:114.98, ra:null, rb:null}
+  ];
+
+  // seed ices exactly as the Week 1 newsletter listed them (due 9/20)
+  var ICES = [
+    {id:"i1", who:"Sophie Kappos", week:"Week 1", reason:"Kyle Pitts (0-pt player)", status:"owed"},
+    {id:"i2", who:"Alex Doty", week:"Week 1", reason:"Romeo Doubs (0-pt player)", status:"owed"},
+    {id:"i3", who:"Alex Doty", week:"Week 1", reason:"Lowest-scoring team of the week (Week 1)", status:"owed"},
+    {id:"i4", who:"Hobson Sherrill", week:"Week 1", reason:"Colston Loveland (0-pt player)", status:"owed"},
+    {id:"i5", who:"Lewis Collier", week:"Week 1", reason:"Texans Defense (0-pt player)", status:"owed"},
+    {id:"i6", who:"Lewis Collier", week:"Week 2", reason:"Puka Nacua (0-pt starter)", status:"owed"},
+    {id:"i7", who:"John Moore", week:"Week 2", reason:"Lowest-scoring team of the week (Week 2)", status:"owed"},
+    {id:"i8", who:"John Moore", week:"Week 2", reason:"D.J. Moore (0-or-less-pt starter)", status:"owed"}
+  ];
+
+  // season chug log — Sophie sends times after each newsletter, this gets updated to match.
+  // shape: {who, week, secs, note}
+  var CHUGS = [
+    {who:"Lewis Collier", week:"Week 1", secs:8},
+    {who:"Alex Doty", week:"Week 1", secs:10},
+    {who:"Alex Doty", week:"Week 1", secs:10},
+    {who:"Sophie Kappos", week:"Week 1", secs:13},
+    {who:"Hobson Sherrill", week:"Week 1", secs:8}
+  ];
+
+  // keyed by week — Sophie sends the Q&As after texting owners each week
+  var WIRE = {
+    1: [
+      {team:"Dotes18", manager:"Alex Doty", qas:[
+        {q:"How do you approach this season as a new joiner trying to make a name in an ultra-competitive league?", a:"Well, Mr. Commish, as not only a new member of the league but also one of the farthest away distance wise, I'm really just trying to stick to the basics. If I can remember to change my lineup on a week to week basis, that'll be huge for the program."},
+        {q:"How does it feel to be the first person to receive an ice this year?", a:"This was a part of my plan, to increase morale and establish myself as a newcomer in this league. I know I've met a lot of people in the league but I wanted to make sure they knew who they were dealing with. Chug of the year incoming?"},
+        {q:"Any comments you'd like to make to your league mates?", a:"I don't even want to come in first, I just cannot come in last for the punishment."}
+      ]},
+      {team:"Prospect Prodigies", manager:"Xavi &amp; Sophia", qas:[
+        {q:"As a past winner, can you describe that championship feeling to your league mates?", a:"Getting my first ring (and the first ever) in the Smirnoff league was an incredible feeling but one that I expected as the goat of the league. I was disappointed last year to fall short in the playoffs but the streets won't forget the 12-2 regular season. Looking forward to another season of domination hopefully now that we have added experience coach Jenkins to a leadership position."},
+        {q:"Commish gave you a B- draft grade, but you put up 182.70 week 1. Care to respond to el commish?", a:"When I saw that video I laughed, not because he was funny but because he was clueless. In a 14 man league you guys let us have Achane AND Jefferson. 182 speaks for itself, we're just getting started and the league has been put on notice."},
+        {q:"Any comments you'd like to make to your league mates?", a:"Although we got some hungry rookies, Sabrina's Carpenters x Truth Hurts remains the team to beat. We're looking forward to seeing some chugs this week and hopefully some good trade offers in our inbox. On a side note, Jonas I expected more from you."}
+      ]},
+      {team:"The Kappocalypse", manager:"Sophie Kappos", qas:[
+        {q:"As the only other commissioner this league has ever seen, what qualities do you hope to see continued this year?", a:"I'd like to see the league continue to uphold the values it was founded on: a zero-tolerance late Ice policy and a firm moral standard when it comes to waiver wire player pickups. Remember, human morals supersede fantasy points. I led with grace last year and dropped woman-kicker Kareem Hunt after being publicly put on blast, and I expect this league to continue under that same firm, courageous leadership. There is, however, one ex-commissioner-approved exception: the Deshaun Watson Hall Pass. Anyone playing against me is allowed, and strongly encouraged, to pick him up and start him. Morals are important, but developing a 31-year old sexual harasser should take priority on your team."},
+        {q:"You were struck by the Kyle Pitts curse & instantly put him on the trade block. What are you hoping to get out of him?", a:"Fuck Kyle Pitts, I will take just about anyone for him."},
+        {q:"Any comments you'd like to make to your league mates?", a:"Dom you're trash. Jonas I'm about to walk you like a dog."}
+      ]}
+    ],
+    2: [
+      {team:"Lewiscollier", manager:"Lewis Collier", qas:[
+        {q:"What do you have to say to those who have called your draft the worst of all time?", a:"It's true… draft night was not planned well on my part but look where we are now. My kicker put up 17 this week!!!"},
+        {q:"How does it feel to have a week 2 win, even with a DNP start out of Puka?", a:"A camel born without bumps must learn to run with the horses and that is exactly what we did this week."},
+        {q:"Any comments you'd like to share with your leaguemates?", a:"Better start buying your cases from Costco because the show has arrived!"}
+      ]},
+      {team:"Natty Ice", manager:"Natalie Plude", qas:[
+        {q:"Who do you think is your biggest competition in the league, and who do you not have to worry about at all?", a:"Right now, my biggest competition is Caden Skinner. When I opened the Sleeper app, it showed him in 1st place, so naturally I'm concerned. Honestly, I'm worried about everyone because I barely know how to use the app. I'm just out here clicking buttons and hoping for the best."},
+        {q:"How do you replace starting QB Jayden Daniels?", a:"I'm going to be honest this message is how I learned that my QB is injured and will need to be replaced so Dak Prescott it is unless someone wants to give me their QB 👀 & if someone could teach me how to edit my lineup that'd be greatly appreciated."},
+        {q:"Any comments you'd like to share with your leaguemates?", a:"I'm currently accepting thoughts, prayers, and trades, so please send those my way immediately. Jayden Daniels going down has really tested my character, but I remain confident I can overcome this adversity and continue ruining everyone's Sunday. Also, to my leaguemates: enjoy your wins now, because I'll be seeing you in the playoffs. Probably. Maybe. Please don't fact check that."}
+      ]}
+    ]
+  };
+
+  // rows from the shared Supabase "ice_submissions" table — the real source of truth for who's cleared
+  var remoteIceSubmissions = [];
+
+  function allIces(){
+    var fulfilledIds = {};
+    remoteIceSubmissions.forEach(function(s){ if(s.ice_id) fulfilledIds[s.ice_id] = true; });
+    return ICES.map(function(i){
+      if(fulfilledIds[i.id]){
+        var copy = {}; for(var k in i){ copy[k]=i[k]; }
+        copy.status = "fulfilled";
+        return copy;
+      }
+      return i;
+    });
+  }
+  function personTeam(name){ for(var i=0;i<PEOPLE.length;i++) if(PEOPLE[i].name===name) return PEOPLE[i].team; return null; }
+
+  function refreshIceSubmissions(){
+    if(!sb) return;
+    sb.from("ice_submissions").select("*").order("created_at", {ascending:false}).then(function(res){
+      if(res && res.data){ remoteIceSubmissions = res.data; }
+      renderTally();
+      renderIceVideos();
+    }).catch(function(){});
+  }
+
+  function renderIceVideos(){
+    var grid = document.getElementById("videos-grid");
+    var empty = document.getElementById("videos-empty");
+    if(!grid) return;
+    if(remoteIceSubmissions.length===0){
+      grid.innerHTML = "";
+      empty.style.display = "block";
+      return;
+    }
+    empty.style.display = "none";
+    grid.innerHTML = remoteIceSubmissions.map(function(s){
+      return '<div class="video-card">'
+        + '<video controls preload="metadata" src="'+esc(s.video_url)+'"></video>'
+        + '<div class="meta"><div class="who">'+esc(s.who)+'</div><div class="reason">'+esc((s.week?s.week+" — ":"")+(s.reason||""))+'</div></div>'
+        + '</div>';
+    }).join("");
+  }
+
+  // ---------------- tabs ----------------
+  var tabs = ["wire","recaps","standings","ice","chug","submit","videos"];
+  function showTab(id){
+    if(tabs.indexOf(id)===-1) id="recaps";
+    tabs.forEach(function(t){
+      document.getElementById("view-"+t).classList.toggle("active", t===id);
+    });
+    var links = document.querySelectorAll("#tabnav a");
+    for(var i=0;i<links.length;i++){
+      links[i].classList.toggle("active", links[i].getAttribute("data-tab")===id);
+    }
+  }
+  window.addEventListener("hashchange", function(){ showTab(location.hash.replace("#","")); });
+
+  // ---------------- render: recaps ----------------
+  var currentWeek = CURRENT_WEEK;
+  var weeksAvailable = [1,2];
+
+  function weekMatchups(w){ return MATCHUPS.filter(function(m){ return m.week===w; }); }
+
+  function renderWeekChips(){
+    var el = document.getElementById("weekchips");
+    var html = "";
+    weeksAvailable.forEach(function(w){
+      html += '<button data-week="'+w+'" class="'+(w===currentWeek?"active":"")+'">Week '+w+'</button>';
+    });
+    html += '<button disabled>Week '+UPCOMING_WEEK+' — in progress</button>';
+    el.innerHTML = html;
+    var btns = el.querySelectorAll("button[data-week]");
+    for(var i=0;i<btns.length;i++){
+      btns[i].addEventListener("click", function(){
+        currentWeek = parseInt(this.getAttribute("data-week"),10);
+        renderWeekChips();
+        renderRecapHeader();
+        renderStats();
+        renderGotw();
+        renderMatchups();
+      });
+    }
+  }
+
+  function renderRecapHeader(){
+    document.getElementById("recap-eyebrow").textContent = "Week "+currentWeek;
+    document.getElementById("recap-title").textContent = "Week "+currentWeek+" Recaps";
+    var ms = weekMatchups(currentWeek);
+    document.getElementById("recap-lede").textContent = currentWeek+" week"+(currentWeek===1?"":"s")+" down. Here's what happened.";
+  }
+
+  function renderStats(){
+    var ms = weekMatchups(currentWeek);
+    var el = document.getElementById("stats");
+    if(ms.length===0){ el.innerHTML = ""; return; }
+    var all = [];
+    ms.forEach(function(m){
+      all.push({team:teamOf(m.a), pts:m.sa});
+      all.push({team:teamOf(m.b), pts:m.sb});
+    });
+    var high = all.slice().sort(function(a,b){return b.pts-a.pts;})[0];
+    var low = all.slice().sort(function(a,b){return a.pts-b.pts;})[0];
+    var margins = ms.map(function(m){ return {m:m, margin:Math.abs(m.sa-m.sb)}; });
+    var blowout = margins.slice().sort(function(a,b){return b.margin-a.margin;})[0];
+    var nail = margins.slice().sort(function(a,b){return a.margin-b.margin;})[0];
+    function winnerName(mm){ return (mm.sa>mm.sb? teamOf(mm.a): teamOf(mm.b)).name; }
+    function loserName(mm){ return (mm.sa>mm.sb? teamOf(mm.b): teamOf(mm.a)).name; }
+    el.innerHTML =
+      '<div class="stat"><div class="k">High score</div><div class="v">'+high.pts.toFixed(2)+'</div><div class="sub">'+esc(high.team.name)+'</div></div>'
+      + '<div class="stat owe"><div class="k">Low score</div><div class="v">'+low.pts.toFixed(2)+'</div><div class="sub">'+esc(low.team.name)+' — that’s an ice</div></div>'
+      + '<div class="stat"><div class="k">Biggest blowout</div><div class="v">+'+blowout.margin.toFixed(2)+'</div><div class="sub">'+esc(winnerName(blowout.m))+' over '+esc(loserName(blowout.m))+'</div></div>'
+      + '<div class="stat"><div class="k">Nail-biter</div><div class="v">'+nail.margin.toFixed(2)+'</div><div class="sub">'+esc(winnerName(nail.m))+' over '+esc(loserName(nail.m))+'</div></div>';
+  }
+
+  function renderGotw(){
+    var gow = GAME_OF_WEEK[currentWeek];
+    var playsInWeek = currentWeek + 1;
+    document.getElementById("gotw-eyebrow").textContent = "Game of the Week · Week "+currentWeek+" pick (plays Week "+playsInWeek+")";
+    var splitEl = document.getElementById("gotw-split");
+
+    if(gow){
+      document.getElementById("gotw-tag").textContent = "“"+gow.tag+"”";
+      document.getElementById("gotw-matchline").textContent = gow.matchline || "";
+      document.getElementById("gotw-preview").textContent = gow.preview || "";
+      if(gow.splitA!=null && gow.splitB!=null){
+        document.getElementById("gotw-split-a").style.width = gow.splitA+"%";
+        document.getElementById("gotw-split-b").style.width = gow.splitB+"%";
+        splitEl.style.display = "flex";
+      } else {
+        splitEl.style.display = "none";
+      }
+    } else {
+      document.getElementById("gotw-tag").textContent = "Pick coming soon";
+      document.getElementById("gotw-matchline").textContent = "";
+      document.getElementById("gotw-preview").textContent = "Sophie hasn't flagged a marquee matchup for Week "+playsInWeek+" yet.";
+      splitEl.style.display = "none";
+    }
+  }
+
+  function renderMatchups(){
+    var el = document.getElementById("matchups");
+    var html = "";
+    weekMatchups(currentWeek).forEach(function(m){
+      var ta = teamOf(m.a), tb = teamOf(m.b);
+      var aWin = m.sa > m.sb;
+      var winner = aWin ? ta : tb, loser = aWin ? tb : ta;
+      var winScore = aWin ? m.sa : m.sb, loseScore = aWin ? m.sb : m.sa;
+      var winBlurb = aWin ? m.ra : m.rb, loseBlurb = aWin ? m.rb : m.ra;
+      html += '<div class="mcard">';
+      html += '  <div class="score">';
+      html += rowHtml(winner, winScore, true);
+      html += rowHtml(loser, loseScore, false);
+      html += '  </div>';
+      if(winBlurb || loseBlurb){
+        html += '  <div class="recap">';
+        html += '    <div class="blurb"><div class="who-said">'+esc(winner.name)+'</div><p>'+winBlurb+'</p></div>';
+        html += '    <div class="blurb"><div class="who-said">'+esc(loser.name)+'</div><p>'+loseBlurb+'</p></div>';
+        html += '  </div>';
+      } else {
+        html += '  <div class="recap"><p style="color:var(--ink-faint); font-size:13px; margin:0;">Commish write-up pending.</p></div>';
+      }
+      html += '</div>';
+    });
+    el.innerHTML = html;
+  }
+  function rowHtml(team, score, win){
+    var role = team.commish ? '<span class="badge role">Commish</span>' : "";
+    return '<div class="mrow '+(win?"win":"lose")+'">'
+      + '<div class="who"><div><div class="name">'+esc(team.name)+(win?' <span class="badge win">W</span>':'')+role+'</div>'
+      + '<div class="mgr">'+esc(team.managers.join(" &amp; "))+'</div></div></div>'
+      + '<div class="pts mono">'+score.toFixed(2)+'</div>'
+      + '</div>';
+  }
+
+  // ---------------- render: standings ----------------
+  function renderStandings(){
+    var sorted = TEAMS.slice().sort(function(a,b){ return a.rank-b.rank; });
+    var rows = "";
+    var seenToilet = false;
+    sorted.forEach(function(t){
+      if(t.bracket==="toilet" && !seenToilet){
+        rows += '<tr class="div-row"><td colspan="4">Toilet Bowl</td></tr>';
+        seenToilet = true;
+      }
+      rows += '<tr class="'+(t.bracket==="toilet"?"toilet":"")+'">'
+        + '<td class="rk">'+t.rank+'</td>'
+        + '<td class="team">'+esc(t.name)+(t.commish?' <span class="badge role">Commish</span>':'')+'<div class="mgr">'+esc(t.managers.join(" &amp; "))+'</div></td>'
+        + '<td class="rec mono">'+t.w+'-'+t.l+'</td>'
+        + '<td class="pts mono">'+t.pts.toFixed(2)+'</td>'
+        + '</tr>';
+    });
+    var thead = '<thead><tr><th>Rk</th><th>Team</th><th style="text-align:right">Record</th><th style="text-align:right">Pts</th></tr></thead>';
+    document.getElementById("standings-table").innerHTML = thead + "<tbody>" + rows + "</tbody>";
+
+    var maxPts = Math.max.apply(null, TEAMS.map(function(t){return t.pts;}));
+    var byPts = TEAMS.slice().sort(function(a,b){ return b.pts-a.pts; });
+    var bars = "";
+    byPts.forEach(function(t){
+      var pct = Math.round((t.pts/maxPts)*100);
+      bars += '<div class="bar-row">'
+        + '<div class="lbl">'+esc(t.name)+'</div>'
+        + '<div class="track"><div class="fill '+(t.bracket==="playoff"?"playoff":"toilet")+'" style="width:'+pct+'%"></div></div>'
+        + '<div class="val mono">'+t.pts.toFixed(1)+'</div>'
+        + '</div>';
+    });
+    document.getElementById("barchart-body").innerHTML = bars;
+  }
+
+  // ---------------- render: ice tally ----------------
+  function tallyFor(name){
+    var mine = allIces().filter(function(i){ return i.who===name; });
+    var owed = mine.length;
+    var fulfilled = mine.filter(function(i){ return i.status==="fulfilled"; }).length;
+    return {owed:owed, fulfilled:fulfilled, items:mine};
+  }
+  function renderTally(){
+    var thead = '<thead><tr><th>Manager</th><th>Status</th><th>Reason(s)</th></tr></thead>';
+    var rows = "";
+    // order: people currently owing first, then everyone else, mirroring the newsletter's running tally
+    var withOwe = PEOPLE.map(function(p){
+      var t = tallyFor(p.name);
+      return {p:p, t:t};
+    });
+    withOwe.sort(function(a,b){
+      var aOwed = a.t.owed - a.t.fulfilled, bOwed = b.t.owed - b.t.fulfilled;
+      if(aOwed!==bOwed) return bOwed-aOwed;
+      return 0;
+    });
+    withOwe.forEach(function(x){
+      var outstanding = x.t.owed - x.t.fulfilled;
+      var pill = outstanding>0 ? '<span class="pill owed">'+x.t.fulfilled+' of '+x.t.owed+'</span>' : '<span class="pill clear">'+x.t.fulfilled+' of '+x.t.owed+'</span>';
+      var reasons = x.t.items.map(function(i){ return i.reason + (i.status==="fulfilled"?" — cleared":""); }).join("; ") || "—";
+      rows += '<tr><td class="tm">'+esc(x.p.name)+'<div class="team">'+esc(teamName(x.p.team))+'</div></td><td>'+pill+'</td><td class="reasons">'+esc(reasons)+'</td></tr>';
+    });
+    document.getElementById("tally-table").innerHTML = thead + "<tbody>"+rows+"</tbody>";
+
+    // populate selects
+    var submitNameSel = document.getElementById("submit-name");
+    if(submitNameSel){
+      submitNameSel.innerHTML = PEOPLE.map(function(p){ return '<option value="'+esc(p.name)+'">'+esc(p.name)+'</option>'; }).join("");
+      populateWhichIce("submit-name","submit-which",false);
+      submitNameSel.onchange = function(){ populateWhichIce("submit-name","submit-which",false); };
+    }
+  }
+  function populateWhichIce(nameSelId, whichSelId, allowNone){
+    var name = document.getElementById(nameSelId).value;
+    var owed = allIces().filter(function(i){ return i.who===name && i.status==="owed"; });
+    var sel = document.getElementById(whichSelId);
+    var opts = "";
+    if(allowNone){ opts += '<option value="">No ice — just a chug</option>'; }
+    if(owed.length===0){
+      if(!allowNone) opts = '<option value="">No ices currently owed — nice</option>';
+    } else {
+      opts += owed.map(function(i){ return '<option value="'+i.id+'">'+esc(i.week+" — "+i.reason)+'</option>'; }).join("");
+    }
+    sel.innerHTML = opts;
+  }
+
+  // ---------------- chug submissions (optionally tied to an owed ice) ----------------
+  // Safari (esp. iOS) has a long-standing bug where fetch() unreliably aborts large
+  // file/blob request bodies with a generic "Load failed" network error that isn't a
+  // real server rejection. Supabase's JS client uploads via fetch() under the hood, so
+  // we bypass it here and POST straight to the storage REST endpoint with a plain
+  // XMLHttpRequest instead, which Safari handles far more reliably for big uploads.
+  function xhrUploadFile(bucket, path, file, contentType, onProgress){
+    return new Promise(function(resolve, reject){
+      var url = SUPABASE_URL + "/storage/v1/object/" + bucket + "/" + encodeURIComponent(path);
+      var xhr = new XMLHttpRequest();
+      xhr.open("POST", url, true);
+      xhr.setRequestHeader("apikey", SUPABASE_ANON_KEY);
+      xhr.setRequestHeader("authorization", "Bearer " + SUPABASE_ANON_KEY);
+      xhr.setRequestHeader("content-type", contentType);
+      xhr.setRequestHeader("x-upsert", "false");
+      if(xhr.upload && onProgress){ xhr.upload.onprogress = onProgress; }
+      xhr.onload = function(){
+        if(xhr.status >= 200 && xhr.status < 300){ resolve(xhr); }
+        else { reject(new Error("Upload failed (" + xhr.status + "): " + (xhr.responseText || "try again").slice(0,150))); }
+      };
+      xhr.onerror = function(){ reject(new Error("Network error during upload — check your connection and try again.")); };
+      xhr.ontimeout = function(){ reject(new Error("Upload timed out — try again.")); };
+      xhr.timeout = 5 * 60 * 1000;
+      xhr.send(file);
+    });
+  }
+  // Even with XHR, a mobile connection hiccup can still kill an upload mid-transfer —
+  // retry a couple times before giving up.
+  function uploadWithRetry(bucket, path, file, contentType, statusEl, attemptsLeft, totalAttempts){
+    var attemptNum = totalAttempts - attemptsLeft + 1;
+    if(totalAttempts > 1){ statusEl.textContent = "Uploading… (attempt "+attemptNum+" of "+totalAttempts+")"; }
+    else { statusEl.textContent = "Uploading…"; }
+    return xhrUploadFile(bucket, path, file, contentType, function(evt){
+      if(evt.lengthComputable){
+        var pct = Math.round((evt.loaded / evt.total) * 100);
+        statusEl.textContent = (totalAttempts > 1 ? "Uploading… (attempt "+attemptNum+" of "+totalAttempts+") " : "Uploading… ") + pct + "%";
+      }
+    }).catch(function(e){
+      if(attemptsLeft > 1){
+        return new Promise(function(resolve){ setTimeout(resolve, 1200); }).then(function(){
+          return uploadWithRetry(bucket, path, file, contentType, statusEl, attemptsLeft - 1, totalAttempts);
+        });
+      }
+      throw e;
+    });
+  }
+
+  document.getElementById("submit-upload").addEventListener("click", function(){
+    var statusEl = document.getElementById("submit-upload-status");
+    var name = document.getElementById("submit-name").value;
+    var which = document.getElementById("submit-which");
+    var iceId = which.value || null;
+    var whichText = which.options.length ? which.options[which.selectedIndex].text : "";
+    var fileInput = document.getElementById("submit-file");
+    var file = fileInput.files && fileInput.files[0];
+
+    if(!file){ statusEl.textContent = "Choose a video file first."; return; }
+    if(!sb){ statusEl.textContent = "Upload isn't connected right now — try again shortly."; return; }
+
+    statusEl.textContent = "Uploading…";
+    var ext = (file.name.split(".").pop() || "mp4").toLowerCase();
+    var path = Date.now() + "_chug_" + name.replace(/[^a-z0-9]+/gi,"") + "." + ext;
+
+    uploadWithRetry("ice-videos", path, file, file.type || "video/mp4", statusEl, 3, 3).then(function(res){
+      var pub = sb.storage.from("ice-videos").getPublicUrl(path);
+      var videoUrl = pub && pub.data ? pub.data.publicUrl : null;
+      var ice = iceId ? ICES.filter(function(i){ return i.id===iceId; })[0] : null;
+      var week = ice ? ice.week : "Week "+CURRENT_WEEK;
+      var reason = iceId ? whichText : "Chug submission";
+      return sb.from("ice_submissions").insert({
+        who: name, ice_id: iceId, week: week, reason: reason, video_url: videoUrl
+      });
+    }).then(function(res){
+      if(res && res.error) throw res.error;
+      statusEl.textContent = "Uploaded — nice work.";
+      fileInput.value = "";
+      refreshIceSubmissions();
+    }).catch(function(e){
+      statusEl.textContent = "Upload failed: " + (e && e.message ? e.message : "try again.");
+    });
+  });
+
+  // ---------------- render: chug central ----------------
+  // remote rows from the shared Supabase "chug_log" table, merged with the hand-entered CHUGS list
+  var remoteChugLog = [];
+  function allChugsCombined(){ return CHUGS.concat(remoteChugLog); }
+  function refreshChugLog(){
+    if(!sb) return;
+    sb.from("chug_log").select("*").order("created_at", {ascending:false}).then(function(res){
+      if(res && res.data){ remoteChugLog = res.data; }
+      renderChugBoard();
+    }).catch(function(){});
+  }
+  function chugStatsPerPerson(list){
+    var stats = {};
+    list.forEach(function(c){
+      var secs = parseFloat(c.secs);
+      if(isNaN(secs)) return;
+      if(!stats[c.who]) stats[c.who] = {who:c.who, times:[]};
+      stats[c.who].times.push(secs);
+    });
+    return Object.keys(stats).map(function(k){
+      var s = stats[k];
+      var pr = Math.min.apply(null, s.times);
+      var avg = s.times.reduce(function(a,b){ return a+b; }, 0) / s.times.length;
+      return {who:s.who, pr:pr, avg:avg, count:s.times.length};
+    }).sort(function(a,b){ return a.pr-b.pr; });
+  }
+  function rankAt(list, i, key){
+    var v = list[i][key];
+    var r = i;
+    while(r>0 && list[r-1][key]===v) r--;
+    return r+1;
+  }
+  function rankLabel(list, i, key){
+    var v = list[i][key];
+    var tied = (i>0 && list[i-1][key]===v) || (i<list.length-1 && list[i+1][key]===v);
+    var rk = rankAt(list, i, key);
+    return tied ? "Tied-"+rk : String(rk);
+  }
+  function rankClass(list, i, key){
+    return rankAt(list, i, key)===1 ? "rk first" : "rk";
+  }
+  function renderChugBoard(){
+    var combined = allChugsCombined();
+    var board = chugStatsPerPerson(combined);
+    var wrap = document.getElementById("board-table");
+    var empty = document.getElementById("board-empty");
+    if(board.length===0){
+      wrap.innerHTML = "";
+      empty.style.display = "block";
+    } else {
+      empty.style.display = "none";
+      var thead = '<thead><tr><th>Rk</th><th>Chugger</th><th>Team</th><th style="text-align:right">PR</th><th style="text-align:right">Avg</th><th style="text-align:right">Chugs</th></tr></thead>';
+      var rows = board.map(function(b,i){
+        return '<tr><td class="'+rankClass(board,i,"pr")+'">'+rankLabel(board,i,"pr")+'</td><td class="tm">'+esc(b.who)+'</td><td class="team">'+esc(teamName(personTeam(b.who)))+'</td><td class="mono" style="text-align:right">'+b.pr.toFixed(1)+'s</td><td class="mono" style="text-align:right">'+b.avg.toFixed(1)+'s</td><td class="mono" style="text-align:right">'+b.count+'</td></tr>';
+      }).join("");
+      wrap.innerHTML = thead + "<tbody>"+rows+"</tbody>";
+    }
+
+    renderChugWeekChips(combined);
+    renderChugWeekTable(combined);
+  }
+
+  function chugWeeksAvailable(list){
+    var weeks = {};
+    list.forEach(function(c){ if(c.week) weeks[c.week] = true; });
+    return Object.keys(weeks).sort(function(a,b){
+      var na = parseInt((String(a).match(/\d+/)||[0])[0],10);
+      var nb = parseInt((String(b).match(/\d+/)||[0])[0],10);
+      return na-nb;
+    });
+  }
+  var currentChugWeek = null;
+  function renderChugWeekChips(combined){
+    var weeks = chugWeeksAvailable(combined);
+    if(currentChugWeek===null || weeks.indexOf(currentChugWeek)===-1){
+      currentChugWeek = weeks.length ? weeks[weeks.length-1] : null;
+    }
+    var el = document.getElementById("chug-weekchips");
+    if(weeks.length===0){ el.innerHTML = ""; return; }
+    var html = "";
+    weeks.forEach(function(w){
+      html += '<button data-week="'+esc(w)+'" class="'+(w===currentChugWeek?"active":"")+'">'+esc(w)+'</button>';
+    });
+    el.innerHTML = html;
+    var btns = el.querySelectorAll("button[data-week]");
+    for(var i=0;i<btns.length;i++){
+      btns[i].addEventListener("click", function(){
+        currentChugWeek = this.getAttribute("data-week");
+        var combined = allChugsCombined();
+        renderChugWeekChips(combined);
+        renderChugWeekTable(combined);
+      });
+    }
+  }
+  function renderChugWeekTable(combined){
+    var wrap = document.getElementById("chug-week-table");
+    var empty = document.getElementById("chug-week-empty");
+    var weekList = combined.filter(function(c){
+      var secs = parseFloat(c.secs);
+      return c.week===currentChugWeek && !isNaN(secs);
+    }).map(function(c){
+      return {who:c.who, secs:parseFloat(c.secs)};
+    }).sort(function(a,b){ return a.secs-b.secs; });
+    if(weekList.length===0){
+      wrap.innerHTML = "";
+      empty.style.display = "block";
+    } else {
+      empty.style.display = "none";
+      var thead = '<thead><tr><th>Rk</th><th>Chugger</th><th>Team</th><th style="text-align:right">Time</th></tr></thead>';
+      var rows = weekList.map(function(c,i){
+        return '<tr><td class="'+rankClass(weekList,i,"secs")+'">'+rankLabel(weekList,i,"secs")+'</td><td class="tm">'+esc(c.who)+'</td><td class="team">'+esc(teamName(personTeam(c.who)))+'</td><td class="mono" style="text-align:right">'+c.secs.toFixed(1)+'s</td></tr>';
+      }).join("");
+      wrap.innerHTML = thead + "<tbody>"+rows+"</tbody>";
+    }
+  }
+
+  function copyText(text, btn){
+    function fallback(){
+      var ta = document.createElement("textarea");
+      ta.value = text; ta.style.position="fixed"; ta.style.opacity="0";
+      document.body.appendChild(ta); ta.focus(); ta.select();
+      try{ document.execCommand("copy"); }catch(e){}
+      document.body.removeChild(ta);
+    }
+    var done = function(){
+      var old = btn.textContent;
+      btn.textContent = "Copied";
+      setTimeout(function(){ btn.textContent = old; }, 1500);
+    };
+    if(navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(text).then(done, fallback);
+    } else { fallback(); done(); }
+  }
+
+  // ---------------- render: wire ----------------
+  var wireWeeksAvailable = Object.keys(WIRE).map(function(k){ return parseInt(k,10); }).sort(function(a,b){ return a-b; });
+  var currentWireWeek = wireWeeksAvailable.length ? wireWeeksAvailable[wireWeeksAvailable.length-1] : 1;
+
+  function renderWireChips(){
+    var el = document.getElementById("wire-weekchips");
+    var html = "";
+    wireWeeksAvailable.forEach(function(w){
+      html += '<button data-week="'+w+'" class="'+(w===currentWireWeek?"active":"")+'">Week '+w+'</button>';
+    });
+    el.innerHTML = html;
+    var btns = el.querySelectorAll("button[data-week]");
+    for(var i=0;i<btns.length;i++){
+      btns[i].addEventListener("click", function(){
+        currentWireWeek = parseInt(this.getAttribute("data-week"),10);
+        renderWireChips();
+        renderWire();
+      });
+    }
+  }
+
+  function renderWire(){
+    var teams = WIRE[currentWireWeek] || [];
+    var html = "";
+    if(teams.length===0){
+      html = '<div class="empty">Week '+currentWireWeek+' press conferences land once Sophie sends over this week\'s questions and answers.</div>';
+    } else {
+      teams.forEach(function(w){
+        html += '<div class="wire-team"><h3>'+esc(w.team)+' <span style="font-family:\'Work Sans\'; font-size:12px; font-weight:500; color:var(--ink-faint)">&nbsp;— '+w.manager+'</span></h3>';
+        w.qas.forEach(function(qa){
+          html += '<div class="qa"><div class="q">'+esc(qa.q)+'</div><p class="a">“'+esc(qa.a)+'”</p></div>';
+        });
+        html += '</div>';
+      });
+    }
+    document.getElementById("wire-body").innerHTML = html;
+  }
+
+  function esc(s){
+    return String(s==null?"":s).replace(/[&<>"']/g, function(c){
+      return {"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[c];
+    });
+  }
+
+  // ---------------- init ----------------
+  renderWeekChips();
+  renderRecapHeader();
+  renderStats();
+  renderGotw();
+  renderMatchups();
+  renderStandings();
+  renderTally();
+  renderChugBoard();
+  renderWireChips();
+  renderWire();
+  renderIceVideos();
+  refreshIceSubmissions();
+  refreshChugLog();
+  showTab(location.hash ? location.hash.replace("#","") : "recaps");
+})();
+</script>
