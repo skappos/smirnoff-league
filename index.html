@@ -590,9 +590,13 @@
     }
     empty.style.display = "none";
     grid.innerHTML = remoteIceSubmissions.map(function(s){
+      // older rows can have the week baked into the front of `reason` already —
+      // strip it so it doesn't get shown twice alongside s.week
+      var reasonText = s.reason || "";
+      if(s.week && reasonText.indexOf(s.week+" — ")===0){ reasonText = reasonText.slice((s.week+" — ").length); }
       return '<div class="video-card">'
         + '<video controls preload="metadata" src="'+esc(s.video_url)+'"></video>'
-        + '<div class="meta"><div class="who">'+esc(s.who)+'</div><div class="reason">'+esc((s.week?s.week+" — ":"")+(s.reason||""))+'</div></div>'
+        + '<div class="meta"><div class="who">'+esc(s.who)+'</div><div class="reason">'+esc((s.week?s.week+" — ":"")+reasonText)+'</div></div>'
         + '</div>';
     }).join("");
   }
@@ -868,7 +872,6 @@
     var name = document.getElementById("submit-name").value;
     var which = document.getElementById("submit-which");
     var iceId = which.value || null;
-    var whichText = which.options.length ? which.options[which.selectedIndex].text : "";
     var fileInput = document.getElementById("submit-file");
     var file = fileInput.files && fileInput.files[0];
 
@@ -884,7 +887,7 @@
       var videoUrl = pub && pub.data ? pub.data.publicUrl : null;
       var ice = iceId ? ICES.filter(function(i){ return i.id===iceId; })[0] : null;
       var week = ice ? ice.week : "Week "+CURRENT_WEEK;
-      var reason = iceId ? whichText : "Chug submission";
+      var reason = ice ? ice.reason : "Chug submission";
       return sb.from("ice_submissions").insert({
         who: name, ice_id: iceId, week: week, reason: reason, video_url: videoUrl
       });
