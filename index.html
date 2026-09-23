@@ -1,3 +1,4 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"></head><body>
 <title>Smirnoff League</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -170,7 +171,8 @@
   table.tally tr:last-child td{border-bottom:none;}
   table.tally td.tm{font-weight:700;}
   table.tally td.tm .team{color:var(--ink-faint); font-size:12px; font-weight:500; margin-top:2px;}
-  .pill{font-family:"JetBrains Mono",monospace; font-size:11.5px; font-weight:700; border-radius:999px; padding:3px 10px; display:inline-block;}
+  table.tally th.status, table.tally td.status{width:1%; white-space:nowrap;}
+  .pill{font-family:"JetBrains Mono",monospace; font-size:11.5px; font-weight:700; border-radius:999px; padding:3px 10px; display:inline-block; white-space:nowrap;}
   .pill.owed{background:var(--owed-soft); color:var(--owed);}
   .pill.clear{background:var(--clear-soft); color:var(--clear);}
   .reasons{font-size:11.5px; color:var(--ink-faint);}
@@ -759,7 +761,7 @@
     return {owed:owed, fulfilled:fulfilled, items:mine};
   }
   function renderTally(){
-    var thead = '<thead><tr><th>Manager</th><th>Status</th><th>Reason(s)</th></tr></thead>';
+    var thead = '<thead><tr><th>Manager</th><th class="status">Status</th><th>Reason(s)</th></tr></thead>';
     var rows = "";
     // order: people currently owing first, then everyone else, mirroring the newsletter's running tally
     var withOwe = PEOPLE.map(function(p){
@@ -774,8 +776,8 @@
     withOwe.forEach(function(x){
       var outstanding = x.t.owed - x.t.fulfilled;
       var pill = outstanding>0 ? '<span class="pill owed">'+x.t.fulfilled+' of '+x.t.owed+'</span>' : '<span class="pill clear">'+x.t.fulfilled+' of '+x.t.owed+'</span>';
-      var reasons = x.t.items.map(function(i){ return i.reason + (i.status==="fulfilled"?" — cleared":""); }).join("; ") || "—";
-      rows += '<tr><td class="tm">'+esc(x.p.name)+'<div class="team">'+esc(teamName(x.p.team))+'</div></td><td>'+pill+'</td><td class="reasons">'+esc(reasons)+'</td></tr>';
+      var reasons = x.t.items.filter(function(i){ return i.status==="owed"; }).map(function(i){ return i.reason; }).join("; ") || "—";
+      rows += '<tr><td class="tm">'+esc(x.p.name)+'<div class="team">'+esc(teamName(x.p.team))+'</div></td><td class="status">'+pill+'</td><td class="reasons">'+esc(reasons)+'</td></tr>';
     });
     document.getElementById("tally-table").innerHTML = thead + "<tbody>"+rows+"</tbody>";
 
@@ -1078,3 +1080,5 @@
   showTab(location.hash ? location.hash.replace("#","") : "recaps");
 })();
 </script>
+
+</body></html>
