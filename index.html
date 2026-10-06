@@ -784,6 +784,18 @@
   // Thumbnails: grab a frame from the middle of each chug video (where the chugging is)
   // and use it as the poster, so the archive shows the chug instead of a black box.
   var posterCache = {}, thumbQueue = [], thumbBusy = false;
+  // Hand-picked thumbnail moments (seconds into the video), keyed by the file name.
+  // Anything not listed uses the halfway point.
+  var THUMB_AT = {
+    "1790181430988_chug_SophieKappos.mov": 36
+  };
+  function thumbTime(url, d){
+    var file = String(url).split("/").pop();
+    var t = THUMB_AT[file];
+    if(t!=null && isFinite(d) && d > 0) return Math.min(t, Math.max(0, d - 0.1));
+    if(t!=null) return t;
+    return (isFinite(d) && d > 0) ? d * 0.5 : 1;
+  }
   function queueThumbs(grid){
     var vids = grid.querySelectorAll("video[data-thumb]");
     var io = ("IntersectionObserver" in window) ? new IntersectionObserver(function(entries){
@@ -809,8 +821,7 @@
     var timer = setTimeout(finish, 15000);
     v.crossOrigin = "anonymous"; v.muted = true; v.playsInline = true; v.setAttribute("playsinline",""); v.preload = "metadata";
     v.addEventListener("loadedmetadata", function(){
-      var d = v.duration;
-      v.currentTime = (isFinite(d) && d > 0) ? d * 0.5 : 1;
+      v.currentTime = thumbTime(url, v.duration);
     });
     v.addEventListener("seeked", function(){
       try{
