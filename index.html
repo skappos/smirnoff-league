@@ -670,7 +670,9 @@
     {who:"Lewis Collier", week:"Week 2", secs:10, note:"Puka Nacua (0-pt starter)"},
     {who:"Hobson Sherrill", week:"Week 3", secs:13, note:"Lowest-scoring team of the week (Week 3)", disclaimer:"Mega Ice to regular Ice conversion in effect"},
     {who:"Alex Jonas", week:"Week 3", secs:6, note:"Cowboys Defense (-1 pt starter)"},
-    {who:"Lewis Collier", week:"Week 3", secs:10, note:"Puka Nacua (0-pt starter)"}
+    {who:"Lewis Collier", week:"Week 3", secs:10, note:"Puka Nacua (0-pt starter)"},
+    {who:"Tori Giordano", week:"Week 3", secs:52, note:"Nico Collins (0-pt starter)", disclaimer:"Mega Ice to regular Ice conversion in effect"},
+    {who:"Tori Giordano", week:"Week 3", secs:52, note:"Jayden Reed (0-pt starter)", disclaimer:"Mega Ice to regular Ice conversion in effect"}
   ];
 
   // keyed by week — Sophie sends the Q&As after texting owners each week
@@ -1198,7 +1200,7 @@
       var rows = weekList.map(function(c,i){
         return '<tr><td class="'+rankClass(weekList,i,"secs")+'">'+rankLabel(weekList,i,"secs")+'</td><td class="tm">'+esc(c.who)+'</td><td class="team">'+esc(teamName(personTeam(c.who)))+'</td><td class="mono" style="text-align:right">'+c.secs.toFixed(1)+'s'+(c.disclaimer?'<sup class="chug-star">*</sup>':'')+'</td></tr>';
       }).join("");
-      var notes = weekList.filter(function(c){ return c.disclaimer; }).map(function(c){ return '<div>* '+esc(c.who)+': '+esc(c.disclaimer)+'</div>'; }).join("");
+      var seenNote = {}; var notes = weekList.filter(function(c){ var k=c.who+'|'+c.disclaimer; if(!c.disclaimer || seenNote[k]) return false; seenNote[k]=1; return true; }).map(function(c){ return '<div>* '+esc(c.who)+': '+esc(c.disclaimer)+'</div>'; }).join("");
       wrap.innerHTML = thead + "<tbody>"+rows+"</tbody>" + (notes ? '<caption class="chug-note">'+notes+'</caption>' : "");
     }
   }
