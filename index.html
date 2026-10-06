@@ -252,6 +252,8 @@
   table.board td.rk.first{color:var(--g-link); text-shadow:0 0 12px rgb(143 227 255 / .6);}
   table.board td.tm{font-weight:800; color:var(--g-text-strong);}
   table.board td.team{color:var(--g-muted);}
+  .chug-star{color:var(--g-link); font-weight:800; margin-left:2px;}
+  table.board caption.chug-note{caption-side:bottom; text-align:left; padding:10px 14px; font-size:13px; font-style:italic; color:var(--g-muted); background:rgb(4 19 34 / .35); border-top:1px solid var(--g-line);}
   .empty{padding:24px; text-align:center; color:var(--g-muted); font-size:15px; border:1px dashed var(--g-frost-edge); border-radius:20px; margin-bottom:24px; background:rgb(4 19 34 / .4);}
   .view h3{color:var(--g-text-strong);}
 
@@ -665,7 +667,9 @@
     {who:"Hobson Sherrill", week:"Week 1", secs:8},
     {who:"John Moore", week:"Week 2", secs:10, note:"D.J. Moore (0-or-less-pt starter)"},
     {who:"John Moore", week:"Week 2", secs:10, note:"Lowest-scoring team of the week (Week 2)"},
-    {who:"Lewis Collier", week:"Week 2", secs:10, note:"Puka Nacua (0-pt starter)"}
+    {who:"Lewis Collier", week:"Week 2", secs:10, note:"Puka Nacua (0-pt starter)"},
+    {who:"Hobson Sherrill", week:"Week 3", secs:13, note:"Lowest-scoring team of the week (Week 3)", disclaimer:"Mega Ice to regular Ice conversion in effect"},
+    {who:"Alex Jonas", week:"Week 3", secs:6, note:"Cowboys Defense (-1 pt starter)"}
   ];
 
   // keyed by week — Sophie sends the Q&As after texting owners each week
@@ -1182,7 +1186,7 @@
       var secs = parseFloat(c.secs);
       return c.week===currentChugWeek && !isNaN(secs);
     }).map(function(c){
-      return {who:c.who, secs:parseFloat(c.secs)};
+      return {who:c.who, secs:parseFloat(c.secs), disclaimer:c.disclaimer||""};
     }).sort(function(a,b){ return a.secs-b.secs; });
     if(weekList.length===0){
       wrap.innerHTML = "";
@@ -1191,9 +1195,10 @@
       empty.style.display = "none";
       var thead = '<thead><tr><th>Rk</th><th>Chugger</th><th>Team</th><th style="text-align:right">Time</th></tr></thead>';
       var rows = weekList.map(function(c,i){
-        return '<tr><td class="'+rankClass(weekList,i,"secs")+'">'+rankLabel(weekList,i,"secs")+'</td><td class="tm">'+esc(c.who)+'</td><td class="team">'+esc(teamName(personTeam(c.who)))+'</td><td class="mono" style="text-align:right">'+c.secs.toFixed(1)+'s</td></tr>';
+        return '<tr><td class="'+rankClass(weekList,i,"secs")+'">'+rankLabel(weekList,i,"secs")+'</td><td class="tm">'+esc(c.who)+'</td><td class="team">'+esc(teamName(personTeam(c.who)))+'</td><td class="mono" style="text-align:right">'+c.secs.toFixed(1)+'s'+(c.disclaimer?'<sup class="chug-star">*</sup>':'')+'</td></tr>';
       }).join("");
-      wrap.innerHTML = thead + "<tbody>"+rows+"</tbody>";
+      var notes = weekList.filter(function(c){ return c.disclaimer; }).map(function(c){ return '<div>* '+esc(c.who)+': '+esc(c.disclaimer)+'</div>'; }).join("");
+      wrap.innerHTML = thead + "<tbody>"+rows+"</tbody>" + (notes ? '<caption class="chug-note">'+notes+'</caption>' : "");
     }
   }
 
