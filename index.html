@@ -369,7 +369,7 @@
 
   <!-- ================= STANDINGS ================= -->
   <section class="view" id="view-standings">
-    <div class="eyebrow">Power Rankings · Through Week 4</div>
+    <div class="eyebrow">Power Rankings · Through Week 5</div>
     <h2 class="title">Standings</h2>
     <p class="lede">Top 8 are playoff-bound as of this week. Bottom 6 drop into the Toilet Bowl, where the loser gets locked in a pitch-black room with a 300-piece puzzle and a headlamp. Start practicing your edge pieces now.</p>
 
@@ -539,29 +539,29 @@
   }catch(e){ sb = null; }
 
   // ---------------- data ----------------
-  // Records/points current through Week 4 (synced from Sleeper league 1394061072742227968)
+  // Records/points current through Week 5 (synced from Sleeper league 1394061072742227968)
   var TEAMS = [
-    {id:"prospect-prodigies", name:"Guillermo's Gang", managers:["Xavi Fernandez","Sophia Jenkins"], w:1,l:3, bracket:"toilet", rank:12, pts:445.12},
-    {id:"tony-romos-dd", name:"Tony Romo's DD", managers:["Caden Skinner"], w:3,l:1, bracket:"playoff", rank:1, pts:624.82, commish:true},
-    {id:"harold", name:"Harold", managers:["Jackson Harrell"], w:2,l:2, bracket:"playoff", rank:7, pts:507.78},
-    {id:"tordongamsey", name:"TordonGamsey", managers:["Tori Giordano"], w:3,l:1, bracket:"playoff", rank:4, pts:504.88},
-    {id:"mclems-tight-ends", name:"MClem's Tight Ends", managers:["Maggie Clemens"], w:3,l:1, bracket:"playoff", rank:2, pts:547.86},
-    {id:"hobson336god", name:"Hob$on336god", managers:["Hobson Sherrill"], w:3,l:1, bracket:"playoff", rank:5, pts:469.52},
-    {id:"kappocalypse", name:"The Kappocalypse", managers:["Sophie Kappos"], w:3,l:1, bracket:"playoff", rank:6, pts:455.48},
-    {id:"jaxsoff-dart", name:"Ice Bathers", managers:["John Moore"], w:0,l:4, bracket:"toilet", rank:14, pts:444.12},
-    {id:"natty-ice", name:"Natty Ice", managers:["Natalie Plude"], w:1,l:3, bracket:"toilet", rank:13, pts:433.94},
-    {id:"jonasty9", name:"1-16", managers:["Alex Jonas"], w:1,l:3, bracket:"toilet", rank:11, pts:500.40},
-    {id:"dom336god", name:"Dom336god", managers:["Dom Giordano"], w:1,l:3, bracket:"toilet", rank:10, pts:529.46},
-    {id:"jlappp", name:"Jlappp", managers:["Jacob Lapham"], w:3,l:1, bracket:"playoff", rank:3, pts:511.24},
-    {id:"lewiscollier", name:"lewiscollier", managers:["Lewis Collier"], w:2,l:2, bracket:"toilet", rank:9, pts:473.56},
-    {id:"dotes18", name:"Dotes18", managers:["Alex Doty"], w:2,l:2, bracket:"playoff", rank:8, pts:474.00}
+    {id:"prospect-prodigies", name:"Guillermo's Gang", managers:["Xavi Fernandez","Sophia Jenkins"], w:2,l:3, bracket:"toilet", rank:11, pts:615.06},
+    {id:"tony-romos-dd", name:"Tony Romo's DD", managers:["Caden Skinner"], w:4,l:1, bracket:"playoff", rank:1, pts:766.80, commish:true},
+    {id:"harold", name:"Harold", managers:["Jackson Harrell"], w:3,l:2, bracket:"playoff", rank:5, pts:630.58},
+    {id:"tordongamsey", name:"TordonGamsey", managers:["Tori Giordano"], w:3,l:2, bracket:"playoff", rank:4, pts:635.34},
+    {id:"mclems-tight-ends", name:"MClem's Tight Ends", managers:["Maggie Clemens"], w:4,l:1, bracket:"playoff", rank:2, pts:711.56},
+    {id:"hobson336god", name:"Hob$on336god", managers:["Hobson Sherrill"], w:3,l:2, bracket:"playoff", rank:7, pts:585.56},
+    {id:"kappocalypse", name:"The Kappocalypse", managers:["Sophie Kappos"], w:3,l:2, bracket:"playoff", rank:8, pts:565.14},
+    {id:"jaxsoff-dart", name:"Ice Bathers", managers:["John Moore"], w:0,l:5, bracket:"toilet", rank:14, pts:522.94},
+    {id:"natty-ice", name:"Natty Ice", managers:["Natalie Plude"], w:1,l:4, bracket:"toilet", rank:13, pts:528.48},
+    {id:"jonasty9", name:"1-16", managers:["Alex Jonas"], w:2,l:3, bracket:"toilet", rank:9, pts:632.60},
+    {id:"dom336god", name:"Dom336god", managers:["Dom Giordano"], w:1,l:4, bracket:"toilet", rank:12, pts:622.98},
+    {id:"jlappp", name:"Jlappp", managers:["Jacob Lapham"], w:4,l:1, bracket:"playoff", rank:3, pts:656.60},
+    {id:"lewiscollier", name:"lewiscollier", managers:["Lewis Collier"], w:2,l:3, bracket:"toilet", rank:10, pts:617.12},
+    {id:"dotes18", name:"Dotes18", managers:["Alex Doty"], w:3,l:2, bracket:"playoff", rank:6, pts:597.30}
   ];
-  var CURRENT_WEEK = 4; // last fully-scored week
-  var UPCOMING_WEEK = 5;
-  var UPCOMING_MATCHUPS = [ // pairings only — Week 5 hasn't been played yet
-    ["jlappp","jaxsoff-dart"], ["jonasty9","natty-ice"], ["hobson336god","mclems-tight-ends"],
-    ["dom336god","dotes18"], ["tony-romos-dd","tordongamsey"], ["kappocalypse","harold"],
-    ["lewiscollier","prospect-prodigies"]
+  var CURRENT_WEEK = 5; // last fully-scored week
+  var UPCOMING_WEEK = 6;
+  var UPCOMING_MATCHUPS = [ // pairings only — Week 6 hasn't been played yet
+    ["jlappp","natty-ice"], ["mclems-tight-ends","jaxsoff-dart"], ["jonasty9","dotes18"],
+    ["tony-romos-dd","hobson336god"], ["dom336god","harold"], ["tordongamsey","prospect-prodigies"],
+    ["kappocalypse","lewiscollier"]
   ];
 
   // The marquee matchup Sophie picks each week, keyed by the week it's ANNOUNCED in
@@ -661,7 +661,14 @@
     {week:4, a:"tordongamsey", b:"mclems-tight-ends", sa:131.08, sb:128.22, ra:"Tori improves to 3-1 for the first time in her fantasy football career, even with Jauan Jennings and Ladd combining for 1.8 points. This was the nailbiter of the week with a 3 point margin. The Ravens had a modest stat line, and she still pulled out the W. Nico Collins DOMINATED the shitty Cowboys secondary for a whopping 30 points. Rhamondre Stevenson has dirt on Vrabel, as they continue to force touches his way over Henderson. Taylor Swift's boyfriend finally looked washed. A gutty victory here.", rb:"Maggie finally receives her first L of the year, in which her team put up a decent week. Kyle Monangai stole the show this week in the Bears backfield, and he'll be someone to keep an eye on this week. Allen and Gibbs were not superheroes this week, which will always leave this team VULNERABLE. Reichard might be the best fantasy kicker since Kyler \"midget\" Murray can't score in the red zone. After the players mentioned, it was a whole lot of mid for the rest. Look for this top heavy team to bounce back next week."},
     {week:4, a:"kappocalypse", b:"dotes18", sa:91.72, sb:115.32, ra:"Sophie picks up her first L of the campaign in embarrassing fashion. Glock Purdy is proving to be a late round steal at the QB spot. Fairbairn is on a Texans team that somehow has a better offense than defense this year. Those are the only positives of the week. The rest of the team STUNK. Jeremiyah Love said it's going to be a long year, and I believe him after this week. Egbuka is not startable in this disgusting Buccaneers offense. The Chargers are tanking for Jeremiah Smith at this point, and they legitimately might start 0-8. Once again her bench goes off. Can she guess the right starters this week?", rb:"Doty wins this week on the backs of Romeo Doubs, Bowers, and Joe Burrow. After that, this team didn't do shit. JSN had a mediocre week by his standards. Kendre Miller is fantasy suicide. Kenyon Sadiq put up a donut hole following a breakout week. A win is a win, and we can't wait to see this Cleveland frequent put out another Ice this week. I still need to see more to put this team in the top half of the power rankings."},
     {week:4, a:"tony-romos-dd", b:"lewiscollier", sa:140.16, sb:182.36, ra:"The commissioner feels in shambles following an embarrassing Lions loss on primetime, and a loss to Lewis after shitting on his team after the draft. Bryce Young has turned into a solid fantasy QB in year 4 (finally). Kenneth Walker has not changed, and is a top 3 RB option the rest of the year. The rest of the team put up respectable outings BESIDES fantasy darling Parker Washington. A stinker of a week for my fantasy sleeper. Disgusting. Bounce back coming next week for this squad though.", rb:"There you have it folks. They say what comes around goes around, and this matchup felt like destiny. Lewis had a DOMINANT victory here in week 4, putting up a whopping 182 points. Brian Robinson will live in nightmares, as he somehow went for 3 touchdowns in a week where Bijan never got hurt. Puka is dominant. Kyren buttfucked the Eagles. Drake Maye had his best performance of the year. Alvin Kamara turned back the clock for 20+ points. I don't even know. I was sad writing this one out."},
-    {week:4, a:"harold", b:"prospect-prodigies", sa:131.38, sb:88.88, ra:"Harrell bounced back this week for his 2nd win of the season behind the backs of Javonte Williams and Chris Olave. Fantasy headache Jameson Williams put up 16 points, when he should've had 12 more points but he CAN'T CATCH. DK finally had some splash plays. Jake Ferguson is turning into one of the many fantasy terrorists outlined in these newsletters. Midget Murray is ASS but the Vikings keep winning. A win is a win. Let's see if he can stack some more.", rb:"Xavi and Sophia are falling down the power rankings week by week, as they put up the least amount of points here in week 4. We'll see who takes the ice video this week! Injuries have completely derailed this team following their dominant week 1 victory. If you told them they'd be starting Braelon Allen, David Montgomery AND Woody Marks in week 4 of the season, they'd probably call you crazy. Nobody on the bench is coming to save them soon either. Jettas needs to get healthy quick. No point in knocking this team down any more than they already are, but they need to figure out something quick before their season is officially over."}
+    {week:4, a:"harold", b:"prospect-prodigies", sa:131.38, sb:88.88, ra:"Harrell bounced back this week for his 2nd win of the season behind the backs of Javonte Williams and Chris Olave. Fantasy headache Jameson Williams put up 16 points, when he should've had 12 more points but he CAN'T CATCH. DK finally had some splash plays. Jake Ferguson is turning into one of the many fantasy terrorists outlined in these newsletters. Midget Murray is ASS but the Vikings keep winning. A win is a win. Let's see if he can stack some more.", rb:"Xavi and Sophia are falling down the power rankings week by week, as they put up the least amount of points here in week 4. We'll see who takes the ice video this week! Injuries have completely derailed this team following their dominant week 1 victory. If you told them they'd be starting Braelon Allen, David Montgomery AND Woody Marks in week 4 of the season, they'd probably call you crazy. Nobody on the bench is coming to save them soon either. Jettas needs to get healthy quick. No point in knocking this team down any more than they already are, but they need to figure out something quick before their season is officially over."},
+    {week:5, a:"jlappp", b:"jaxsoff-dart", sa:145.36, sb:78.82, ra:"", rb:""},
+    {week:5, a:"jonasty9", b:"natty-ice", sa:132.20, sb:94.54, ra:"", rb:""},
+    {week:5, a:"hobson336god", b:"mclems-tight-ends", sa:116.04, sb:163.70, ra:"", rb:""},
+    {week:5, a:"dom336god", b:"dotes18", sa:93.52, sb:123.30, ra:"", rb:""},
+    {week:5, a:"tony-romos-dd", b:"tordongamsey", sa:141.98, sb:130.46, ra:"", rb:""},
+    {week:5, a:"kappocalypse", b:"harold", sa:109.66, sb:122.80, ra:"", rb:""},
+    {week:5, a:"lewiscollier", b:"prospect-prodigies", sa:143.56, sb:169.94, ra:"", rb:""}
   ];
 
   // seed ices exactly as the Week 1 newsletter listed them (due 9/20)
@@ -686,7 +693,14 @@
     {id:"i18", who:"Alex Doty", week:"Week 4", reason:"Kenyon Sadiq (0-pt starter)", status:"owed"},
     {id:"i19", who:"Natalie Plude", week:"Week 4", reason:"Breece Hall (0-pt starter)", status:"owed"},
     {id:"i20", who:"Natalie Plude", week:"Week 4", reason:"Terry McLaurin (0-pt starter)", status:"owed"},
-    {id:"i21", who:"Sophia Jenkins", week:"Week 4", reason:"Lowest-scoring team of the week (Week 4)", status:"owed"}
+    {id:"i21", who:"Sophia Jenkins", week:"Week 4", reason:"Lowest-scoring team of the week (Week 4)", status:"owed"},
+    {id:"i22", who:"John Moore", week:"Week 5", reason:"Lowest-scoring team of the week (Week 5)", status:"owed"},
+    {id:"i23", who:"John Moore", week:"Week 5", reason:"D.J. Moore (0-pt starter)", status:"owed"},
+    {id:"i24", who:"John Moore", week:"Week 5", reason:"Mack Hollins (0-pt starter)", status:"owed"},
+    {id:"i25", who:"Hobson Sherrill", week:"Week 5", reason:"Roman Wilson (0-pt starter)", status:"owed"},
+    {id:"i26", who:"Natalie Plude", week:"Week 5", reason:"Daniel Carlson (0-pt starter)", status:"owed"},
+    {id:"i27", who:"Lewis Collier", week:"Week 5", reason:"Brian Thomas Jr. (0-pt starter)", status:"owed"},
+    {id:"i28", who:"Lewis Collier", week:"Week 5", reason:"Stefon Diggs (0-pt starter)", status:"owed"}
   ];
 
   // season chug log — Sophie sends times after each newsletter, this gets updated to match.
@@ -899,7 +913,7 @@
 
   // ---------------- render: recaps ----------------
   var currentWeek = CURRENT_WEEK;
-  var weeksAvailable = [1,2,3,4];
+  var weeksAvailable = [1,2,3,4,5];
 
   function weekMatchups(w){ return MATCHUPS.filter(function(m){ return m.week===w; }); }
 
