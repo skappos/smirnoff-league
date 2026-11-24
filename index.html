@@ -371,7 +371,7 @@
 
   <!-- ================= STANDINGS ================= -->
   <section class="view" id="view-standings">
-    <div class="eyebrow">Power Rankings · Through Week 10</div>
+    <div class="eyebrow">Power Rankings · Through Week 11</div>
     <h2 class="title">Standings</h2>
     <p class="lede">Top 8 are playoff-bound as of this week. Bottom 6 drop into the Toilet Bowl, where the loser gets locked in a pitch-black room with a 300-piece puzzle and a headlamp. Start practicing your edge pieces now.</p>
 
@@ -541,29 +541,29 @@
   }catch(e){ sb = null; }
 
   // ---------------- data ----------------
-  // Records/points current through Week 10 (synced from Sleeper league 1394061072742227968)
+  // Records/points current through Week 11 (synced from Sleeper league 1394061072742227968)
   var TEAMS = [
-    {id:"prospect-prodigies", name:"Guillermo's Gang", managers:["Xavi Fernandez","Sophia Jenkins"], w:5,l:5, bracket:"playoff", rank:7, pts:1203.22},
-    {id:"tony-romos-dd", name:"Tony Romo's DD", managers:["Caden Skinner"], w:7,l:3, bracket:"playoff", rank:2, pts:1355.36, commish:true},
-    {id:"harold", name:"Harold", managers:["Jackson Harrell"], w:5,l:5, bracket:"playoff", rank:8, pts:1187.12},
-    {id:"tordongamsey", name:"TordonGamsey", managers:["Tori Giordano"], w:4,l:6, bracket:"toilet", rank:12, pts:1104.68},
-    {id:"mclems-tight-ends", name:"MClem's Tight Ends", managers:["Maggie Clemens"], w:6,l:4, bracket:"playoff", rank:5, pts:1302.30},
-    {id:"hobson336god", name:"Hob$on336god", managers:["Hobson Sherrill"], w:4,l:6, bracket:"toilet", rank:11, pts:1148.48},
-    {id:"kappocalypse", name:"The Kappocalypse", managers:["Sophie Kappos"], w:7,l:3, bracket:"playoff", rank:4, pts:1136.16},
-    {id:"jaxsoff-dart", name:"Ice Bathers", managers:["John Moore"], w:1,l:9, bracket:"toilet", rank:14, pts:1076.00},
-    {id:"natty-ice", name:"Natty Ice", managers:["Natalie Plude"], w:3,l:7, bracket:"toilet", rank:13, pts:1122.30},
-    {id:"jonasty9", name:"1-16", managers:["Alex Jonas"], w:4,l:6, bracket:"toilet", rank:10, pts:1188.94},
-    {id:"dom336god", name:"Dom336god", managers:["Dom Giordano"], w:4,l:6, bracket:"toilet", rank:9, pts:1299.08},
-    {id:"jlappp", name:"Jlappp", managers:["Jacob Lapham"], w:8,l:2, bracket:"playoff", rank:1, pts:1379.90},
-    {id:"lewiscollier", name:"lewiscollier", managers:["Lewis Collier"], w:5,l:5, bracket:"playoff", rank:6, pts:1222.40},
-    {id:"dotes18", name:"Dotes18", managers:["Alex Doty"], w:7,l:3, bracket:"playoff", rank:3, pts:1243.12}
+    {id:"prospect-prodigies", name:"Guillermo's Gang", managers:["Xavi Fernandez","Sophia Jenkins"], w:6,l:5, bracket:"playoff", rank:6, pts:1359.66},
+    {id:"tony-romos-dd", name:"Tony Romo's DD", managers:["Caden Skinner"], w:8,l:3, bracket:"playoff", rank:2, pts:1492.92, commish:true},
+    {id:"harold", name:"Harold", managers:["Jackson Harrell"], w:6,l:5, bracket:"playoff", rank:7, pts:1297.10},
+    {id:"tordongamsey", name:"TordonGamsey", managers:["Tori Giordano"], w:4,l:7, bracket:"toilet", rank:13, pts:1196.70},
+    {id:"mclems-tight-ends", name:"MClem's Tight Ends", managers:["Maggie Clemens"], w:6,l:5, bracket:"playoff", rank:5, pts:1406.26},
+    {id:"hobson336god", name:"Hob$on336god", managers:["Hobson Sherrill"], w:4,l:7, bracket:"toilet", rank:12, pts:1254.64},
+    {id:"kappocalypse", name:"The Kappocalypse", managers:["Sophie Kappos"], w:7,l:4, bracket:"playoff", rank:4, pts:1239.06},
+    {id:"jaxsoff-dart", name:"Ice Bathers", managers:["John Moore"], w:2,l:9, bracket:"toilet", rank:14, pts:1185.86},
+    {id:"natty-ice", name:"Natty Ice", managers:["Natalie Plude"], w:4,l:7, bracket:"toilet", rank:11, pts:1258.30},
+    {id:"jonasty9", name:"1-16", managers:["Alex Jonas"], w:4,l:7, bracket:"toilet", rank:10, pts:1263.72},
+    {id:"dom336god", name:"Dom336god", managers:["Dom Giordano"], w:5,l:6, bracket:"playoff", rank:8, pts:1434.98},
+    {id:"jlappp", name:"Jlappp", managers:["Jacob Lapham"], w:8,l:3, bracket:"playoff", rank:1, pts:1509.72},
+    {id:"lewiscollier", name:"lewiscollier", managers:["Lewis Collier"], w:5,l:6, bracket:"toilet", rank:9, pts:1332.08},
+    {id:"dotes18", name:"Dotes18", managers:["Alex Doty"], w:8,l:3, bracket:"playoff", rank:3, pts:1336.42}
   ];
-  var CURRENT_WEEK = 10; // last fully-scored week
-  var UPCOMING_WEEK = 11;
-  var UPCOMING_MATCHUPS = [ // pairings only — Week 11 hasn't been played yet
-    ["jlappp","prospect-prodigies"], ["harold","lewiscollier"], ["tony-romos-dd","kappocalypse"],
-    ["tordongamsey","dotes18"], ["dom336god","mclems-tight-ends"], ["hobson336god","natty-ice"],
-    ["jonasty9","jaxsoff-dart"]
+  var CURRENT_WEEK = 11; // last fully-scored week
+  var UPCOMING_WEEK = 12;
+  var UPCOMING_MATCHUPS = [ // pairings only — Week 12 hasn't been played yet
+    ["jlappp","lewiscollier"], ["kappocalypse","prospect-prodigies"], ["tordongamsey","harold"],
+    ["tony-romos-dd","dom336god"], ["dotes18","hobson336god"], ["jonasty9","mclems-tight-ends"],
+    ["natty-ice","jaxsoff-dart"]
   ];
 
   // The marquee matchup Sophie picks each week, keyed by the week it's ANNOUNCED in
@@ -807,7 +807,14 @@
       rb:"I can’t keep knocking John down. At this point I think he is officially eliminated from playoff contention, and just needs to avoid last place in the playoffs. Skattebo looked geeat, CJ Stroud has had a bounce back year, and Matthew Golden has been fantasy gold. That’s about it. Jalen Coker has a midget throwing him the rock. LaPorta has become an afterthought after threating not to re-sign. Mr. Kiner entered the starting lineup too - pretty bad. Good luck John."},
     {week:10, a:"jonasty9", b:"hobson336god", sa:133.48, sb:110.80, 
       ra:"Jonasty takes another W behind the backs of BIJAN robinson, and Chase Brown. What could be the key to unlocking an end of season push is Mr. Jordon Tyson. He was peppered with targets, while Olave looked to be an afterthought. If Drake London and Rashee Rice can put 15+ points a week up, then this team will slither its way into the playoffs.",
-      rb:"Hobson is REELING following his 3rd straight L, and the playoffs becoming more of a challenge. Bryce Young has been anything BUT good since being acquired from the commish. Somehow that team is still 1st place in the dogshit NFC South. Chubba Hubbard is part of the reason, as he erupted for 34+ points. The player doing well after the trade is P Wash. He has outplayed Zay Flowers, and this commish wants him back straight up for Zay. After that, a whole lot of shit this week. Time to rebound."}
+      rb:"Hobson is REELING following his 3rd straight L, and the playoffs becoming more of a challenge. Bryce Young has been anything BUT good since being acquired from the commish. Somehow that team is still 1st place in the dogshit NFC South. Chubba Hubbard is part of the reason, as he erupted for 34+ points. The player doing well after the trade is P Wash. He has outplayed Zay Flowers, and this commish wants him back straight up for Zay. After that, a whole lot of shit this week. Time to rebound."},
+    {week:11, a:"jlappp", b:"prospect-prodigies", sa:129.82, sb:156.44, ra:"", rb:""},
+    {week:11, a:"harold", b:"lewiscollier", sa:109.98, sb:109.68, ra:"", rb:""},
+    {week:11, a:"tony-romos-dd", b:"kappocalypse", sa:137.56, sb:102.90, ra:"", rb:""},
+    {week:11, a:"tordongamsey", b:"dotes18", sa:92.02, sb:93.30, ra:"", rb:""},
+    {week:11, a:"dom336god", b:"mclems-tight-ends", sa:135.90, sb:103.96, ra:"", rb:""},
+    {week:11, a:"hobson336god", b:"natty-ice", sa:106.16, sb:136.00, ra:"", rb:""},
+    {week:11, a:"jonasty9", b:"jaxsoff-dart", sa:74.78, sb:109.86, ra:"", rb:""}
   ];
 
   // seed ices exactly as the Week 1 newsletter listed them (due 9/20)
@@ -873,7 +880,13 @@
     {id:"i61", who:"Jackson Harrell", week:"Week 9", reason:"Tyler Loop (0-pt starter)", status:"owed"},
     {id:"i62", who:"Lewis Collier", week:"Week 10", reason:"Lowest-scoring team of the week (Week 10)", status:"owed"},
     {id:"i63", who:"Hobson Sherrill", week:"Week 10", reason:"Xavier Worthy (0-pt starter)", status:"owed"},
-    {id:"i64", who:"Lewis Collier", week:"Week 10", reason:"Omar Cooper Jr. (0-pt starter)", status:"owed"}
+    {id:"i64", who:"Lewis Collier", week:"Week 10", reason:"Omar Cooper Jr. (0-pt starter)", status:"owed"},
+    {id:"i65", who:"Alex Jonas", week:"Week 11", reason:"Lowest-scoring team of the week (Week 11)", status:"owed"},
+    {id:"i66", who:"Alex Jonas", week:"Week 11", reason:"Juwan Johnson (0-pt starter)", status:"owed"},
+    {id:"i67", who:"Tori Giordano", week:"Week 11", reason:"Vikings Defense (0-pt starter)", status:"owed"},
+    {id:"i68", who:"Maggie Clemens", week:"Week 11", reason:"J.K. Dobbins (0-pt starter)", status:"owed"},
+    {id:"i69", who:"Jackson Harrell", week:"Week 11", reason:"Rachaad White (0-pt starter)", status:"owed"},
+    {id:"i70", who:"John Moore", week:"Week 11", reason:"Dalton Kincaid (0-pt starter)", status:"owed"}
   ];
 
   // season chug log — Sophie sends times after each newsletter, this gets updated to match.
@@ -1197,7 +1210,7 @@
 
   // ---------------- render: recaps ----------------
   var currentWeek = CURRENT_WEEK;
-  var weeksAvailable = [1,2,3,4,5,6,7,8,9,10];
+  var weeksAvailable = [1,2,3,4,5,6,7,8,9,10,11];
 
   function weekMatchups(w){ return MATCHUPS.filter(function(m){ return m.week===w; }); }
 
